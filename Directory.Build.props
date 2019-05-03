@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <RootNamespace>PDSI</RootNamespace>
+    <Authors>Doug Wilson</Authors>
+    <Company>Provision Data Systems Inc.</Company>
+    <Product>Master Control Program</Product>
+    <Description>Does the things nobody else wants to do.</Description>
+    <Copyright>Copyright 2019 Doug Wilson</Copyright>
+    <NeutralLanguage>en</NeutralLanguage>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <Version>0.0.1</Version>
+    <AssemblyVersion>0.0.1</AssemblyVersion>
+    <FileVersion>0.0.1</FileVersion>
+    <InformationalVersion>0.0.1</InformationalVersion>
+    <PackageVersion>0.0.1</PackageVersion>
+  </PropertyGroup>
+</Project>
