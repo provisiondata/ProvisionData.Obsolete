@@ -24,6 +24,8 @@
  *******************************************************************************/
 
 using System;
+using System.Buffers.Text;
+using System.Runtime.InteropServices;
 using System.Diagnostics;
 
 namespace ProvisionData
@@ -51,5 +53,45 @@ namespace ProvisionData
         public static void Reset() => _getGuid = GetGuidInternal;
 
         private static Guid GetGuidInternal() => CombGuid.NewGuid();
+
+
+        private const Byte ForwardSlashByte = (Byte)'/';
+        private const Byte PlusByte = (Byte)'+';
+        private const Char Underscore = '_';
+        private const Char Dash = '-';
+
+        public static String EncodeBase64String(this Guid guid)
+        {
+            Span<Byte> guidBytes = stackalloc Byte[16];
+            Span<Byte> encodedBytes = stackalloc Byte[24];
+
+            MemoryMarshal.TryWrite(guidBytes, ref guid); // write bytes from the Guid
+            Base64.EncodeToUtf8(guidBytes, encodedBytes, out _, out _);
+
+            Span<Char> chars = stackalloc Char[22];
+
+            // replace any characters which are not URL safe
+            // skip the final two bytes as these will be '==' padding we don't need
+            for (var i = 0; i < 22; i++)
+            {
+                switch (encodedBytes[i])
+                {
+                    case ForwardSlashByte:
+                        chars[i] = Dash;
+                        break;
+                    case PlusByte:
+                        chars[i] = Underscore;
+                        break;
+                    default:
+                        chars[i] = (Char)encodedBytes[i];
+                        break;
+                }
+            }
+
+            var final = new String(chars);
+
+            return final;
+        }
     }
 }
+
