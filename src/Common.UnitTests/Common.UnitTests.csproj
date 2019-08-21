@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
     <IsPackable>false</IsPackable>
     <RootNamespace>ProvisionData</RootNamespace>
     <ApplicationIcon>pdsi.ico</ApplicationIcon>
@@ -10,6 +10,7 @@
     <FileVersion>0.0.1</FileVersion>
     <InformationalVersion>0.0.1</InformationalVersion>
     <PackageVersion>0.0.1</PackageVersion>
+    <AssemblyName>ProvisionData.Common.UnitTests</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
@@ -25,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Provision.Common\ProvisionData.Common.csproj" />
+    <ProjectReference Include="..\Common\Common.csproj" />
   </ItemGroup>
-  
+
 </Project>
