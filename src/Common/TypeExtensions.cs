@@ -60,8 +60,8 @@ namespace ProvisionData
         public static IEnumerable<TypeInfo> GetAllNestedTypes(this Type type)
                 => GetAll(type, ti => ti.DeclaredNestedTypes);
 
-        public static IEnumerable<PropertyInfo> GetAllProperties(this Type type)
-                => GetAll(type, ti => ti.DeclaredProperties);
+        //public static IEnumerable<PropertyInfo> GetAllProperties(this Type type)
+        //        => GetAll(type, ti => ti.DeclaredProperties);
 
         public static IEnumerable<Type> GetAllTypesImplementingOpenGenericType(this IEnumerable<Assembly> assemblies, Type openGenericType) => GetAllTypesImplementingOpenGenericType(assemblies, openGenericType, a => true);
 
@@ -99,6 +99,41 @@ namespace ProvisionData
                 }
                 type = typeInfo.BaseType;
             }
+        }
+
+
+        /// <summary>
+        /// Returns all properties on the given type, going up the inheritance hierarchy.
+        /// </summary>
+        public static IEnumerable<PropertyInfo> GetAllProperties(this Type type)
+        {
+            var props = new List<PropertyInfo>(type.GetProperties());
+            foreach (var interfaceType in type.GetInterfaces())
+            {
+                props.AddRange(GetAllProperties(interfaceType));
+            }
+
+            var tracked = new List<PropertyInfo>(props.Count);
+            var duplicates = new List<PropertyInfo>(props.Count);
+            foreach (var p in props)
+            {
+                var duplicate = tracked.SingleOrDefault(n => n.Name == p.Name && n.PropertyType == p.PropertyType);
+                if (duplicate != null)
+                {
+                    duplicates.Add(p);
+                }
+                else
+                {
+                    tracked.Add(p);
+                }
+            }
+
+            foreach (var d in duplicates)
+            {
+                props.Remove(d);
+            }
+
+            return props;
         }
     }
 }
