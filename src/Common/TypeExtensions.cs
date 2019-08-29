@@ -63,7 +63,7 @@ namespace ProvisionData
         //public static IEnumerable<PropertyInfo> GetAllProperties(this Type type)
         //        => GetAll(type, ti => ti.DeclaredProperties);
 
-        public static IEnumerable<Type> GetAllTypesImplementingOpenGenericType(this IEnumerable<Assembly> assemblies, Type openGenericType) => GetAllTypesImplementingOpenGenericType(assemblies, openGenericType, a => true);
+        public static IEnumerable<Type> GetAllTypesImplementingOpenGenericType(this IEnumerable<Assembly> assemblies, Type openGenericType) => GetAllTypesImplementingOpenGenericType(assemblies, openGenericType, _ => true);
 
         public static IEnumerable<Type> GetAllTypesImplementingOpenGenericType(this IEnumerable<Assembly> assemblies, Type openGenericType, Predicate<Assembly> predicate)
         {
@@ -72,7 +72,7 @@ namespace ProvisionData
                    from interfaces in type.GetTypeInfo().GetInterfaces()
                    let baseType = type.GetTypeInfo()
                    where predicate(assembly)
-                   where (baseType != null && baseType.IsGenericType && openGenericType.GetTypeInfo().IsAssignableFrom(baseType.GetGenericTypeDefinition()))
+                   where (baseType?.IsGenericType == true && openGenericType.GetTypeInfo().IsAssignableFrom(baseType.GetGenericTypeDefinition()))
                       || (interfaces.GetTypeInfo().IsGenericType && openGenericType.GetTypeInfo().IsAssignableFrom(interfaces.GetGenericTypeDefinition()))
                    group type by type into g
                    select g.Key;
@@ -100,7 +100,6 @@ namespace ProvisionData
                 type = typeInfo.BaseType;
             }
         }
-
 
         /// <summary>
         /// Returns all properties on the given type, going up the inheritance hierarchy.
