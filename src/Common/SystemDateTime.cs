@@ -24,28 +24,45 @@
  *******************************************************************************/
 
 using System;
-using System.Diagnostics;
+using System.Threading;
 
 namespace ProvisionData
 {
-
-    [DebuggerNonUserCode]
+    //[DebuggerNonUserCode]
     public static class SystemDateTime
     {
+        private static readonly AutoResetEvent Lock = new AutoResetEvent(true);
         private static Func<DateTime> _getTime = GetUtc;
 
-        [DebuggerNonUserCode]
         public static DateTime UtcNow => _getTime();
 
-        [DebuggerNonUserCode]
-        public static void DateIs(DateTime time) => _getTime = () => new DateTime(time.Ticks, DateTimeKind.Unspecified);
+        private static DateTime GetUtc() => new DateTime(DateTime.UtcNow.Ticks, DateTimeKind.Unspecified);
 
-        [DebuggerNonUserCode]
-        public static void DateIs(Int32 year, Int32 month = 1, Int32 day = 1) => DateIs(new DateTime(year, month, day));
+        public static IDisposable DateIs(DateTime time)
+        {
+            Lock.WaitOne();
+            _getTime = () => new DateTime(time.Ticks, DateTimeKind.Unspecified);
+            return new Disposable(() =>
+            {
+                Reset();
+                Lock.Set();
+            });
+        }
 
-        [DebuggerNonUserCode]
+        public static IDisposable DateIs(Int32 year, Int32 month = 1, Int32 day = 1) => DateIs(new DateTime(year, month, day));
+
         public static void Reset() => _getTime = GetUtc;
 
-        private static DateTime GetUtc() => new DateTime(DateTime.UtcNow.Ticks, DateTimeKind.Unspecified);
+        private class Disposable : IDisposable
+        {
+            private readonly Action _action;
+
+            public Disposable(Action action)
+            {
+                _action = action;
+            }
+
+            public void Dispose() => _action();
+        }
     }
 }
