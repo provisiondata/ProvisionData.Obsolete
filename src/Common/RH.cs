@@ -73,8 +73,10 @@ namespace ProvisionData
                     var key = type.Namespace + "." + resource;
 
                     // ReSharper disable once AssignNullToNotNullAttribute
-                    using var reader = new StreamReader(assembly.GetManifestResourceStream(key));
-                    Cache[cachekey] = reader.ReadToEnd();
+                    using (var reader = new StreamReader(assembly.GetManifestResourceStream(key)))
+                    {
+                        Cache[cachekey] = reader.ReadToEnd();
+                    }
                 }
                 catch (Exception ex)
                 {

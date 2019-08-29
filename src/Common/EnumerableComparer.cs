@@ -70,32 +70,34 @@ namespace ProvisionData
         /// <param name="y">Second sequence.</param>
         public Int32 Compare(IEnumerable<T> x, IEnumerable<T> y)
         {
-            using var leftIt = x.GetEnumerator();
-            using var rightIt = y.GetEnumerator();
-            while (true)
+            using (var leftIt = x.GetEnumerator())
+            using (var rightIt = y.GetEnumerator())
             {
-                var left = leftIt.MoveNext();
-                var right = rightIt.MoveNext();
-
-                if (!(left || right))
+                while (true)
                 {
-                    return 0;
-                }
+                    var left = leftIt.MoveNext();
+                    var right = rightIt.MoveNext();
 
-                if (!left)
-                {
-                    return -1;
-                }
+                    if (!(left || right))
+                    {
+                        return 0;
+                    }
 
-                if (!right)
-                {
-                    return 1;
-                }
+                    if (!left)
+                    {
+                        return -1;
+                    }
 
-                var itemResult = _comp.Compare(leftIt.Current, rightIt.Current);
-                if (itemResult != 0)
-                {
-                    return itemResult;
+                    if (!right)
+                    {
+                        return 1;
+                    }
+
+                    var itemResult = _comp.Compare(leftIt.Current, rightIt.Current);
+                    if (itemResult != 0)
+                    {
+                        return itemResult;
+                    }
                 }
             }
         }
