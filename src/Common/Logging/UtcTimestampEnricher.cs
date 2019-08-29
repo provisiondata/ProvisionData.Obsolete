@@ -25,6 +25,7 @@
 
 using Serilog.Core;
 using Serilog.Events;
+using System;
 
 namespace ProvisionData.Logging
 {
@@ -37,7 +38,7 @@ namespace ProvisionData.Logging
                 throw new System.ArgumentNullException(nameof(propertyFactory));
             }
 
-            logEvent.AddPropertyIfAbsent(propertyFactory.CreateProperty("UtcTimestamp", SystemDateTime.UtcNow));
+            logEvent.AddPropertyIfAbsent(propertyFactory.CreateProperty("UtcTimestamp", DateTime.UtcNow));
         }
     }
 }

@@ -24,45 +24,76 @@
  *******************************************************************************/
 
 using System;
+using System.Diagnostics;
 using System.Threading;
 
 namespace ProvisionData
 {
-    //[DebuggerNonUserCode]
+    [Obsolete("This will be removed in v2.0.  Use NodaTime.IClock instead because Jon Skeet is awesome!")]
+    public interface ITimeProvider
+    {
+        DateTime UtcNow { get; }
+    }
+
+    [Obsolete("This will be removed in v2.0.  Use NodaTime.IClock instead because Jon Skeet is awesome!")]
+    public interface ITestableTimeProvider : ITimeProvider, IDisposable
+    {
+        void DateIs(DateTime date);
+        void DateIs(Int32 year, Int32 month, Int32 day);
+        void Reset();
+    }
+
+    [DebuggerNonUserCode]
+    [Obsolete("This will be removed in v2.0.  Use NodaTime.IClock instead because Jon Skeet is awesome!")]
     public static class SystemDateTime
     {
-        private static readonly AutoResetEvent Lock = new AutoResetEvent(true);
-        private static Func<DateTime> _getTime = GetUtc;
+        private static readonly Semaphore Pool = new Semaphore(1, 1);
 
-        public static DateTime UtcNow => _getTime();
+        private static Func<DateTime> GetTime = GetUtc;
+
+        public static DateTime UtcNow => GetTime();
 
         private static DateTime GetUtc() => new DateTime(DateTime.UtcNow.Ticks, DateTimeKind.Unspecified);
 
-        public static IDisposable DateIs(DateTime time)
+        [Obsolete("This will be removed in v2.0.  Use NodaTime.IClock instead because Jon Skeet is awesome!")]
+        public static void DateIs(DateTime dateTime) => GetTime = () => new DateTime(dateTime.Ticks, DateTimeKind.Unspecified);
+
+        [Obsolete("This will be removed in v2.0.  Use NodaTime.IClock instead because Jon Skeet is awesome!")]
+        public static void DateIs(Int32 year, Int32 month = 1, Int32 day = 1) => DateIs(new DateTime(year, month, day));
+
+        [Obsolete("This will be removed in v2.0.  Use NodaTime.IClock instead because Jon Skeet is awesome!")]
+        public static void Reset() => GetTime = GetUtc;
+
+        public static ITestableTimeProvider GetTestTimeProvider() => new TestableTimeProvider();
+
+        private class TestableTimeProvider : ITestableTimeProvider
         {
-            Lock.WaitOne();
-            _getTime = () => new DateTime(time.Ticks, DateTimeKind.Unspecified);
-            return new Disposable(() =>
+            private Boolean _locked;
+
+            public DateTime UtcNow => SystemDateTime.UtcNow;
+
+            public void DateIs(DateTime dateTime)
             {
-                Reset();
-                Lock.Set();
-            });
-        }
+                if (!_locked)
+                {
+                    _locked = Pool.WaitOne();
+                }
 
-        public static IDisposable DateIs(Int32 year, Int32 month = 1, Int32 day = 1) => DateIs(new DateTime(year, month, day));
-
-        public static void Reset() => _getTime = GetUtc;
-
-        private class Disposable : IDisposable
-        {
-            private readonly Action _action;
-
-            public Disposable(Action action)
-            {
-                _action = action;
+                SystemDateTime.DateIs(dateTime);
             }
 
-            public void Dispose() => _action();
+            public void DateIs(Int32 year, Int32 month = 1, Int32 day = 1) => DateIs(new DateTime(year, month, day));
+
+            public void Dispose()
+            {
+                SystemDateTime.Reset();
+                if (_locked)
+                {
+                    Pool.Release();
+                }
+            }
+
+            public void Reset() => SystemDateTime.Reset();
         }
     }
 }
