@@ -5,7 +5,6 @@ namespace ProvisionData
 {
     public class RegularExpressionsTests
     {
-
         [Fact]
         public void PortNumber()
         {
@@ -69,7 +68,6 @@ namespace ProvisionData
             RegularExpressions.IPv4AndPort.IsMatch("10.10.10.10:1000").ShouldBe(true);
             RegularExpressions.IPv4AndPort.IsMatch("10.10.10.10:10000").ShouldBe(true);
             RegularExpressions.IPv4AndPort.IsMatch("10.10.10.10:65535").ShouldBe(true);
-
 
             RegularExpressions.IPv4AndPort.IsMatch("10.10.10.10:65536").ShouldBe(false);
             RegularExpressions.IPv4AndPort.IsMatch("10.10.10.10:65545").ShouldBe(false);

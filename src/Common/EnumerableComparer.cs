@@ -63,7 +63,6 @@ namespace ProvisionData
         /// </summary>
         private readonly IComparer<T> _comp;
 
-
         /// <summary>
         /// Compare two sequences of T.
         /// </summary>
@@ -71,34 +70,32 @@ namespace ProvisionData
         /// <param name="y">Second sequence.</param>
         public Int32 Compare(IEnumerable<T> x, IEnumerable<T> y)
         {
-            using (var leftIt = x.GetEnumerator())
-            using (var rightIt = y.GetEnumerator())
+            using var leftIt = x.GetEnumerator();
+            using var rightIt = y.GetEnumerator();
+            while (true)
             {
-                while (true)
+                var left = leftIt.MoveNext();
+                var right = rightIt.MoveNext();
+
+                if (!(left || right))
                 {
-                    var left = leftIt.MoveNext();
-                    var right = rightIt.MoveNext();
+                    return 0;
+                }
 
-                    if (!(left || right))
-                    {
-                        return 0;
-                    }
+                if (!left)
+                {
+                    return -1;
+                }
 
-                    if (!left)
-                    {
-                        return -1;
-                    }
+                if (!right)
+                {
+                    return 1;
+                }
 
-                    if (!right)
-                    {
-                        return 1;
-                    }
-
-                    var itemResult = _comp.Compare(leftIt.Current, rightIt.Current);
-                    if (itemResult != 0)
-                    {
-                        return itemResult;
-                    }
+                var itemResult = _comp.Compare(leftIt.Current, rightIt.Current);
+                if (itemResult != 0)
+                {
+                    return itemResult;
                 }
             }
         }

@@ -28,27 +28,26 @@ using System.Diagnostics;
 
 namespace ProvisionData
 {
-
     [DebuggerNonUserCode]
     public static class SystemGuid
     {
-        private static Func<Guid> _getGuid = GetGuidInternal;
+        private static Func<Guid> GetGuid = GetGuidInternal;
 
         [DebuggerNonUserCode]
-        public static void GuidIs(Guid guid) => _getGuid = () => guid;
+        public static void GuidIs(Guid guid) => GetGuid = () => guid;
 
         [DebuggerNonUserCode]
         public static void GuidIs(String guid)
         {
             var g = Guid.Parse(guid);
-            _getGuid = () => g;
+            GetGuid = () => g;
         }
 
         [DebuggerNonUserCode]
-        public static Guid NewGuid() => _getGuid?.Invoke() ?? GetGuidInternal();
+        public static Guid NewGuid() => GetGuid?.Invoke() ?? GetGuidInternal();
 
         [DebuggerNonUserCode]
-        public static void Reset() => _getGuid = GetGuidInternal;
+        public static void Reset() => GetGuid = GetGuidInternal;
 
         private static Guid GetGuidInternal() => CombGuid.NewGuid();
     }

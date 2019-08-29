@@ -29,7 +29,6 @@ using System.Diagnostics;
 
 namespace ProvisionData
 {
-
     [DebuggerNonUserCode]
     public static class EnumerableExtensions
     {
