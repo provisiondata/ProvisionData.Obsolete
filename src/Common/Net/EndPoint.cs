@@ -35,7 +35,7 @@ namespace ProvisionData.Net
 
         public EndPoint(String address, Int32 port)
         {
-            if (String.IsNullOrWhiteSpace(address) || !RegularExpressions.IPv4.IsMatch(address))
+            if (String.IsNullOrWhiteSpace(address) || !Ptn.IPv4.IsMatch(address))
             {
                 throw new ArgumentException($"'{address}' is not a valid IPv4 Address", nameof(address));
             }
@@ -98,7 +98,7 @@ namespace ProvisionData.Net
             if (!String.IsNullOrWhiteSpace(value))
             {
                 var normalized = value.Trim();
-                if (RegularExpressions.IPv4AndOptionalPort.IsMatch(normalized))
+                if (Ptn.IPv4AndOptionalPort.IsMatch(normalized))
                 {
                     var tokens = normalized.Split(new[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
                     var portNumber = tokens.Length == 2 ? Int32.Parse(tokens[1]) : 0;

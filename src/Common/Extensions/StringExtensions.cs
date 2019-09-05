@@ -25,7 +25,7 @@
 
 using System;
 
-namespace ProvisionData
+namespace ProvisionData.Extensions
 {
     public static class StringExtensions
     {

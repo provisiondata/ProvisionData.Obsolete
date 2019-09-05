@@ -27,7 +27,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace ProvisionData
+namespace ProvisionData.Extensions
 {
     [DebuggerNonUserCode]
     public static class EnumerableExtensions
