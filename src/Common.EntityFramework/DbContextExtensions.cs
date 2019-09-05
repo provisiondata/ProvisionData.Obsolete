@@ -7,6 +7,7 @@ namespace ProvisionData.EntityFramework
 {
     public static class DbContextExtensions
     {
+        // https://www.tabsoverspaces.com/233797-convenient-method-for-explicit-lazy-loading-in-entity-framework-core-or-entity-framework-6
         public static void LoadRelated<TEntity, TReference>(this DbContext context, TEntity entity, Expression<Func<TEntity, TReference>> selector)
             where TEntity : class
             where TReference : class
