@@ -24,11 +24,20 @@
  *******************************************************************************/
 
 using System;
+using System.Diagnostics;
+using System.Globalization;
 
 namespace ProvisionData.Extensions
 {
+    [DebuggerNonUserCode]
     public static class StringExtensions
     {
+        internal static String Format(this String format, params Object[] args)
+            => Format(format, CultureInfo.InvariantCulture, args);
+
+        internal static String Format(this String format, IFormatProvider formatProvider, params Object[] args)
+            => String.Format(formatProvider, format, args);
+
         public static String Quoted(this String value)
         {
             return value.StartsWith("\"", StringComparison.Ordinal) && value.EndsWith("\"", StringComparison.Ordinal) ? value : "\"" + value + "\"";
