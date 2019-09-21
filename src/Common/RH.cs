@@ -56,7 +56,6 @@ namespace ProvisionData
             return GS(resource, type);
         }
 
-        // ReSharper disable once InconsistentNaming
         public static String GS(String resource, Type type)
         {
             var cachekey = type.FullName + "::" + resource;
