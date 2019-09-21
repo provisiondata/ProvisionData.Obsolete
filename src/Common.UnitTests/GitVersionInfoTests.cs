@@ -19,8 +19,8 @@ namespace ProvisionData
             gvi.PreReleaseLabel.Should().NotBeEmpty();
             gvi.PreReleaseNumber.Should().NotBeEmpty();
             gvi.WeightedPreReleaseNumber.Should().NotBeEmpty();
-            gvi.BuildMetaData.Should().BeEmpty();
-            gvi.BuildMetaDataPadded.Should().BeEmpty();
+            gvi.BuildMetaData.Should().NotBeEmpty();
+            gvi.BuildMetaDataPadded.Should().NotBeEmpty();
             gvi.FullBuildMetaData.Should().NotBeEmpty();
             gvi.MajorMinorPatch.Should().NotBeEmpty();
             gvi.SemVer.Should().NotBeEmpty();
