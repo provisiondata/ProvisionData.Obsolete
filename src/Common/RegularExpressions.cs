@@ -30,16 +30,5 @@ namespace ProvisionData
 {
     public static class RegularExpressions
     {
-        private const String PortPattern = @"([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])";
-        private const String IPv4Pattern = @"((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)";
-
-        public static readonly Regex PortNumber = new Regex($"^{PortPattern}$", RegexOptions.Compiled | RegexOptions.ExplicitCapture);
-
-        public static readonly Regex IPv4 = new Regex($"^{IPv4Pattern}$", RegexOptions.Compiled | RegexOptions.ExplicitCapture);
-
-        public static readonly Regex IPv4AndPort = new Regex($"^{IPv4Pattern}\\:{PortPattern}$", RegexOptions.Compiled | RegexOptions.ExplicitCapture);
-
-        public static readonly Regex IPv4AndOptionalPort = new Regex($"^{IPv4Pattern}(\\:{PortPattern})?$", RegexOptions.Compiled | RegexOptions.ExplicitCapture);
-
     }
 }

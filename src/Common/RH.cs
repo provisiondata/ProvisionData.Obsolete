@@ -39,7 +39,7 @@ namespace ProvisionData
 
         public static String GS(String resource)
         {
-            Type type = typeof(RH);
+            var type = typeof(RH);
             return GS(resource, type);
         }
 
@@ -52,28 +52,28 @@ namespace ProvisionData
         [DebuggerStepThrough]
         public static String GS<T>(String resource)
         {
-            Type type = typeof(T);
+            var type = typeof(T);
             return GS(resource, type);
         }
 
         // ReSharper disable once InconsistentNaming
         public static String GS(String resource, Type type)
         {
-            String cachekey = type.FullName + "::" + resource;
+            var cachekey = type.FullName + "::" + resource;
             if (!Cache.ContainsKey(cachekey))
             {
                 try
                 {
-                    Assembly assembly = type.GetTypeInfo().Assembly;
+                    var assembly = type.GetTypeInfo().Assembly;
                     if (assembly == null)
                     {
                         throw new Exception("Could not load the assembly.");
                     }
 
-                    String key = type.Namespace + "." + resource;
+                    var key = type.Namespace + "." + resource;
 
                     // ReSharper disable once AssignNullToNotNullAttribute
-                    using (StreamReader reader = new StreamReader(assembly.GetManifestResourceStream(key)))
+                    using (var reader = new StreamReader(assembly.GetManifestResourceStream(key)))
                     {
                         Cache[cachekey] = reader.ReadToEnd();
                     }
@@ -90,28 +90,28 @@ namespace ProvisionData
         [DebuggerStepThrough]
         public static Stream GRS(String resource)
         {
-            Type type = typeof(RH);
+            var type = typeof(RH);
             return GRS(resource, type);
         }
 
         [DebuggerStepThrough]
         public static Stream GRS<T>(String resource)
         {
-            Type type = typeof(T);
+            var type = typeof(T);
             return GRS(resource, type);
         }
 
         [DebuggerStepThrough]
         public static Stream GRS(String resource, Type type)
         {
-            Assembly assembly = type.GetTypeInfo().Assembly;
+            var assembly = type.GetTypeInfo().Assembly;
 
             if (assembly == null)
             {
                 throw new Exception("Could not load the assembly.");
             }
 
-            String key = type.Namespace + "." + resource;
+            var key = type.Namespace + "." + resource;
 
             return assembly.GetManifestResourceStream(key);
         }

@@ -28,7 +28,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace ProvisionData
+namespace ProvisionData.Extensions
 {
     public static class TypeExtensions
     {
@@ -60,10 +60,10 @@ namespace ProvisionData
         public static IEnumerable<TypeInfo> GetAllNestedTypes(this Type type)
                 => GetAll(type, ti => ti.DeclaredNestedTypes);
 
-        public static IEnumerable<PropertyInfo> GetAllProperties(this Type type)
-                => GetAll(type, ti => ti.DeclaredProperties);
+        //public static IEnumerable<PropertyInfo> GetAllProperties(this Type type)
+        //        => GetAll(type, ti => ti.DeclaredProperties);
 
-        public static IEnumerable<Type> GetAllTypesImplementingOpenGenericType(this IEnumerable<Assembly> assemblies, Type openGenericType) => GetAllTypesImplementingOpenGenericType(assemblies, openGenericType, a => true);
+        public static IEnumerable<Type> GetAllTypesImplementingOpenGenericType(this IEnumerable<Assembly> assemblies, Type openGenericType) => GetAllTypesImplementingOpenGenericType(assemblies, openGenericType, _ => true);
 
         public static IEnumerable<Type> GetAllTypesImplementingOpenGenericType(this IEnumerable<Assembly> assemblies, Type openGenericType, Predicate<Assembly> predicate)
         {
@@ -72,7 +72,7 @@ namespace ProvisionData
                    from interfaces in type.GetTypeInfo().GetInterfaces()
                    let baseType = type.GetTypeInfo()
                    where predicate(assembly)
-                   where (baseType != null && baseType.IsGenericType && openGenericType.GetTypeInfo().IsAssignableFrom(baseType.GetGenericTypeDefinition()))
+                   where (baseType?.IsGenericType == true && openGenericType.GetTypeInfo().IsAssignableFrom(baseType.GetGenericTypeDefinition()))
                       || (interfaces.GetTypeInfo().IsGenericType && openGenericType.GetTypeInfo().IsAssignableFrom(interfaces.GetGenericTypeDefinition()))
                    group type by type into g
                    select g.Key;
@@ -99,6 +99,40 @@ namespace ProvisionData
                 }
                 type = typeInfo.BaseType;
             }
+        }
+
+        /// <summary>
+        /// Returns all properties on the given type, going up the inheritance hierarchy.
+        /// </summary>
+        public static IEnumerable<PropertyInfo> GetAllProperties(this Type type)
+        {
+            var props = new List<PropertyInfo>(type.GetProperties());
+            foreach (var interfaceType in type.GetInterfaces())
+            {
+                props.AddRange(GetAllProperties(interfaceType));
+            }
+
+            var tracked = new List<PropertyInfo>(props.Count);
+            var duplicates = new List<PropertyInfo>(props.Count);
+            foreach (var p in props)
+            {
+                var duplicate = tracked.SingleOrDefault(n => n.Name == p.Name && n.PropertyType == p.PropertyType);
+                if (duplicate != null)
+                {
+                    duplicates.Add(p);
+                }
+                else
+                {
+                    tracked.Add(p);
+                }
+            }
+
+            foreach (var d in duplicates)
+            {
+                props.Remove(d);
+            }
+
+            return props;
         }
     }
 }

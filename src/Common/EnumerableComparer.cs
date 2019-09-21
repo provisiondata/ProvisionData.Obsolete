@@ -63,7 +63,6 @@ namespace ProvisionData
         /// </summary>
         private readonly IComparer<T> _comp;
 
-
         /// <summary>
         /// Compare two sequences of T.
         /// </summary>

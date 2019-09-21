@@ -31,12 +31,12 @@ namespace ProvisionData
 {
     public class NaturalComparer<T> : IComparer<T>
     {
-        private static readonly Regex _split = new Regex(@"([0-9]+)", RegexOptions.Compiled);
-        private static readonly Regex _replace = new Regex(@"\s+", RegexOptions.Compiled);
+        private static readonly Regex Split = new Regex("([0-9]+)", RegexOptions.Compiled);
+        private static readonly Regex Replace = new Regex(@"\s+", RegexOptions.Compiled);
 
         private readonly IComparer<IEnumerable<Object>> _comparer = new EnumerableComparer<Object>();
 
-        private Object[] _convert(IEnumerable<String> str)
+        private Object[] Convert(IEnumerable<String> str)
         {
             var list = new List<Object>();
             foreach (var s in str)
@@ -55,12 +55,12 @@ namespace ProvisionData
 
         public Int32 Compare(T x, T y)
         {
-            var xr = _replace.Replace(x.ToString(), "");
-            var xs = _split.Split(xr);
-            var xc = _convert(xs);
-            var yr = _replace.Replace(y.ToString(), "");
-            var ys = _split.Split(yr);
-            var yc = _convert(ys);
+            var xr = Replace.Replace(x.ToString(), "");
+            var xs = Split.Split(xr);
+            var xc = Convert(xs);
+            var yr = Replace.Replace(y.ToString(), "");
+            var ys = Split.Split(yr);
+            var yc = Convert(ys);
             return _comparer.Compare(xc, yc);
         }
     }

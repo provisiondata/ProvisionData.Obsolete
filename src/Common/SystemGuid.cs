@@ -1,97 +1,54 @@
-﻿/*******************************************************************************
- * MIT License
- *
- * Copyright 2019 Provision Data Systems Inc.  https://provisiondata.com
+﻿/******************************************************************************* 
+ * MIT License 
  * 
- * Permission is hereby granted, free of charge, to any person obtaining a 
- * copy of this software and associated documentation files (the "Software"),
- * to deal in the Software without restriction, including without limitation
- * the rights to use, copy, modify, merge, publish, distribute, sublicense,
- * and/or sell copies of the Software, and to permit persons to whom the 
- * Software is furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
- * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
- * DEALINGS IN THE SOFTWARE.
- *
+ * Copyright 2019 Provision Data Systems Inc.  https://provisiondata.com 
+ *  
+ * Permission is hereby granted, free of charge, to any person obtaining a  
+ * copy of this software and associated documentation files (the "Software"), 
+ * to deal in the Software without restriction, including without limitation 
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense, 
+ * and/or sell copies of the Software, and to permit persons to whom the  
+ * Software is furnished to do so, subject to the following conditions: 
+ * 
+ * The above copyright notice and this permission notice shall be included in 
+ * all copies or substantial portions of the Software. 
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,  
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER  
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING  
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER  
+ * DEALINGS IN THE SOFTWARE. 
+ * 
  *******************************************************************************/
 
 using System;
-using System.Buffers.Text;
-using System.Runtime.InteropServices;
 using System.Diagnostics;
 
 namespace ProvisionData
 {
-
     [DebuggerNonUserCode]
     public static class SystemGuid
     {
-        private static Func<Guid> _getGuid = GetGuidInternal;
+        private static Func<Guid> GetGuid = GetGuidInternal;
 
         [DebuggerNonUserCode]
-        public static void GuidIs(Guid guid) => _getGuid = () => guid;
+        public static void GuidIs(Guid guid) => GetGuid = () => guid;
 
         [DebuggerNonUserCode]
         public static void GuidIs(String guid)
         {
             var g = Guid.Parse(guid);
-            _getGuid = () => g;
+            GetGuid = () => g;
         }
 
         [DebuggerNonUserCode]
-        public static Guid NewGuid() => _getGuid?.Invoke() ?? GetGuidInternal();
+        public static Guid NewGuid() => GetGuid?.Invoke() ?? GetGuidInternal();
 
         [DebuggerNonUserCode]
-        public static void Reset() => _getGuid = GetGuidInternal;
+        public static void Reset() => GetGuid = GetGuidInternal;
 
         private static Guid GetGuidInternal() => CombGuid.NewGuid();
-
-
-        private const Byte ForwardSlashByte = (Byte)'/';
-        private const Byte PlusByte = (Byte)'+';
-        private const Char Underscore = '_';
-        private const Char Dash = '-';
-
-        public static String EncodeBase64String(this Guid guid)
-        {
-            Span<Byte> guidBytes = stackalloc Byte[16];
-            Span<Byte> encodedBytes = stackalloc Byte[24];
-
-            MemoryMarshal.TryWrite(guidBytes, ref guid); // write bytes from the Guid
-            Base64.EncodeToUtf8(guidBytes, encodedBytes, out _, out _);
-
-            Span<Char> chars = stackalloc Char[22];
-
-            // replace any characters which are not URL safe
-            // skip the final two bytes as these will be '==' padding we don't need
-            for (var i = 0; i < 22; i++)
-            {
-                switch (encodedBytes[i])
-                {
-                    case ForwardSlashByte:
-                        chars[i] = Dash;
-                        break;
-                    case PlusByte:
-                        chars[i] = Underscore;
-                        break;
-                    default:
-                        chars[i] = (Char)encodedBytes[i];
-                        break;
-                }
-            }
-
-            var final = new String(chars);
-
-            return final;
-        }
     }
 }
-

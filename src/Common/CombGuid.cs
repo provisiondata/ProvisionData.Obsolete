@@ -28,12 +28,10 @@ using System.Diagnostics;
 
 namespace ProvisionData
 {
-
     // https://github.com/nhibernate/nhibernate-core/blob/master/src/NHibernate/Id/GuidCombGenerator.cs
     [DebuggerStepThrough]
     public static class CombGuid
     {
-
         public static Guid NewGuid()
         {
             var guidArray = Guid.NewGuid().ToByteArray();
