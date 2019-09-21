@@ -10,9 +10,9 @@
     <ApplicationIcon>..\Shared\pdsi.ico</ApplicationIcon>
     <PackageTags></PackageTags>
     <RepositoryType>Git</RepositoryType>
-    <RepositoryUrl>https://git.pdsint.net/PDSI/EventSourcing</RepositoryUrl>
+    <RepositoryUrl>https://git.pdsint.net/PDSI/Common</RepositoryUrl>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <PackageProjectUrl>https://wiki.pdsint.net/research-development/event-sourcing</PackageProjectUrl>
+    <PackageProjectUrl>https://wiki.pdsint.net/research-development/common</PackageProjectUrl>
     <PackageIcon>pdsi.png</PackageIcon>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
