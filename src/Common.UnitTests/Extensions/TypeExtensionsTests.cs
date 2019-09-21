@@ -3,7 +3,7 @@ using System;
 using System.Linq;
 using Xunit;
 
-namespace ProvisionData
+namespace ProvisionData.Extensions
 {
     public class TypeExtensionsTests
     {
