@@ -19,7 +19,7 @@
             return ConvertDoc(doc);
         }
 
-        internal static String ConvertDoc(HtmlDocument doc)
+        internal static String ConvertDoc(this HtmlDocument doc)
         {
             using (var sw = new StringWriter())
             {
@@ -29,7 +29,7 @@
             }
         }
 
-        internal static void ConvertContentTo(HtmlNode node, TextWriter outText, PreceedingDomTextInfo textInfo)
+        internal static void ConvertContentTo(this HtmlNode node, TextWriter outText, PreceedingDomTextInfo textInfo)
         {
             foreach (var subnode in node.ChildNodes)
             {
@@ -37,12 +37,12 @@
             }
         }
 
-        internal static void ConvertTo(HtmlNode node, TextWriter outText)
+        internal static void ConvertTo(this HtmlNode node, TextWriter outText)
         {
             ConvertTo(node, outText, new PreceedingDomTextInfo(false));
         }
 
-        internal static void ConvertTo(HtmlNode node, TextWriter outText, PreceedingDomTextInfo textInfo)
+        internal static void ConvertTo(this HtmlNode node, TextWriter outText, PreceedingDomTextInfo textInfo)
         {
             String html;
             switch (node.NodeType)
