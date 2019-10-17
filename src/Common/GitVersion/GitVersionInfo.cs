@@ -1,12 +1,44 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Linq;
+using System.Reflection;
 
 namespace ProvisionData.GitVersion
 {
-    public class GitVersionInfo
+    public sealed class GitVersionInfo
     {
         private static readonly ConcurrentDictionary<Type, GitVersionInfo> Versions = new ConcurrentDictionary<Type, GitVersionInfo>();
+
+        private readonly Type _type;
+        private String _commitDate;
+        private String _major;
+        private String _minor;
+        private String _patch;
+        private String _preReleaseTag;
+        private String _preReleaseTagWithDash;
+        private String _preReleaseLabel;
+        private String _preReleaseNumber;
+        private String _weightedPreReleaseNumber;
+        private String _buildMetaData;
+        private String _buildMetaDataPadded;
+        private String _fullBuildMetaData;
+        private String _majorMinorPatch;
+        private String _semVer;
+        private String _legacySemVer;
+        private String _legacySemVerPadded;
+        private String _assemblySemVer;
+        private String _assemblySemFileVer;
+        private String _fullSemVer;
+        private String _informationalVersion;
+        private String _branchName;
+        private String _sha;
+        private String _shortSha;
+        private String _nuGetVersionV2;
+        private String _nuGetVersion;
+        private String _nuGetPreReleaseTagV2;
+        private String _nuGetPreReleaseTag;
+        private String _versionSourceSha;
+        private String _commitsSinceVersionSource;
 
         public static GitVersionInfo ForAssemblyContaining<T>()
         {
@@ -19,104 +51,122 @@ namespace ProvisionData.GitVersion
                 {
                     throw new InvalidOperationException($"The \"{assembly.FullName}\" does not contain a \"GitVersionInformation\" type.  Are you sure GitVersion has been setup correctly?");
                 }
-                return new GitVersionInfo(typeInfo.AsType());
+                return new GitVersionInfo(assembly, typeInfo.AsType());
             });
         }
 
-        private readonly Type _type;
+        private GitVersionInfo(Assembly assembly, Type type)
+        {
+            if (assembly is null)
+                throw new ArgumentNullException(nameof(assembly));
+            _type = type ?? throw new ArgumentNullException(nameof(type));
 
-        public GitVersionInfo(Type type) => _type = type ?? throw new ArgumentNullException(nameof(type));
+            AssemblyFullName = assembly.FullName;
+            AssemblyName = AssemblyFullName.Split(new[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries)[0];
+            AssemblyImageRuntimeVersion = assembly.ImageRuntimeVersion;
+            AssemblyLocation = assembly.Location;
+        }
 
-        private String GetValue(String name) => _type.GetField(name).GetValue(null).ToString();
+        private String GetValue(String name)
+            => _type.GetField(name).GetValue(null).ToString();
 
-        private String _major;
-        public String Major => _major ?? (_major = GetValue("Major"));
+        public String AssemblyFullName { get; }
 
-        private String _minor;
-        public String Minor => _minor ?? (_minor = GetValue("Minor"));
+        public String AssemblyName { get; }
 
-        private String _patch;
-        public String Patch => _patch ?? (_patch = GetValue("Patch"));
+        public String AssemblyImageRuntimeVersion { get; }
 
-        private String _preReleaseTag;
-        public String PreReleaseTag => _preReleaseTag ?? (_preReleaseTag = GetValue("PreReleaseTag"));
+        public String AssemblyLocation { get; }
 
-        private String _preReleaseTagWithDash;
-        public String PreReleaseTagWithDash => _preReleaseTagWithDash ?? (_preReleaseTagWithDash = GetValue("PreReleaseTagWithDash"));
+        public String Major
+            => _major ?? (_major = GetValue("Major"));
 
-        private String _preReleaseLabel;
+        public String Minor
+            => _minor ?? (_minor = GetValue("Minor"));
+
+        public String Patch
+            => _patch ?? (_patch = GetValue("Patch"));
+
+        public String PreReleaseTag
+            => _preReleaseTag ?? (_preReleaseTag = GetValue("PreReleaseTag"));
+
+        public String PreReleaseTagWithDash
+            => _preReleaseTagWithDash ?? (_preReleaseTagWithDash = GetValue("PreReleaseTagWithDash"));
+
         public String PreReleaseLabel => _preReleaseLabel ?? (_preReleaseLabel = GetValue("PreReleaseLabel"));
 
-        private String _preReleaseNumber;
-        public String PreReleaseNumber => _preReleaseNumber ?? (_preReleaseNumber = GetValue("PreReleaseNumber"));
+        public String PreReleaseNumber
+            => _preReleaseNumber ?? (_preReleaseNumber = GetValue("PreReleaseNumber"));
 
-        private String _weightedPreReleaseNumber;
-        public String WeightedPreReleaseNumber => _weightedPreReleaseNumber ?? (_weightedPreReleaseNumber = GetValue("WeightedPreReleaseNumber"));
+        public String WeightedPreReleaseNumber
+            => _weightedPreReleaseNumber ?? (_weightedPreReleaseNumber = GetValue("WeightedPreReleaseNumber"));
 
-        private String _buildMetaData;
-        public String BuildMetaData => _buildMetaData ?? (_buildMetaData = GetValue("BuildMetaData"));
+        public String BuildMetaData
+            => _buildMetaData ?? (_buildMetaData = GetValue("BuildMetaData"));
 
-        private String _buildMetaDataPadded;
-        public String BuildMetaDataPadded => _buildMetaDataPadded ?? (_buildMetaDataPadded = GetValue("BuildMetaDataPadded"));
+        public String BuildMetaDataPadded
+            => _buildMetaDataPadded ?? (_buildMetaDataPadded = GetValue("BuildMetaDataPadded"));
 
-        private String _fullBuildMetaData;
-        public String FullBuildMetaData => _fullBuildMetaData ?? (_fullBuildMetaData = GetValue("FullBuildMetaData"));
+        public String FullBuildMetaData
+            => _fullBuildMetaData ?? (_fullBuildMetaData = GetValue("FullBuildMetaData"));
 
-        private String _majorMinorPatch;
-        public String MajorMinorPatch => _majorMinorPatch ?? (_majorMinorPatch = GetValue("MajorMinorPatch"));
+        public String MajorMinorPatch
+            => _majorMinorPatch ?? (_majorMinorPatch = GetValue("MajorMinorPatch"));
 
-        private String _semVer;
-        public String SemVer => _semVer ?? (_semVer = GetValue("SemVer"));
+        public String SemVer
+            => _semVer ?? (_semVer = GetValue("SemVer"));
 
-        private String _legacySemVer;
-        public String LegacySemVer => _legacySemVer ?? (_legacySemVer = GetValue("LegacySemVer"));
+        public String LegacySemVer
+            => _legacySemVer ?? (_legacySemVer = GetValue("LegacySemVer"));
 
-        private String _legacySemVerPadded;
-        public String LegacySemVerPadded => _legacySemVerPadded ?? (_legacySemVerPadded = GetValue("LegacySemVerPadded"));
+        public String LegacySemVerPadded
+            => _legacySemVerPadded ?? (_legacySemVerPadded = GetValue("LegacySemVerPadded"));
 
-        private String _assemblySemVer;
-        public String AssemblySemVer => _assemblySemVer ?? (_assemblySemVer = GetValue("AssemblySemVer"));
+        public String AssemblySemVer
+            => _assemblySemVer ?? (_assemblySemVer = GetValue("AssemblySemVer"));
 
-        private String _assemblySemFileVer;
-        public String AssemblySemFileVer => _assemblySemFileVer ?? (_assemblySemFileVer = GetValue("AssemblySemFileVer"));
+        public String AssemblySemFileVer
+            => _assemblySemFileVer ?? (_assemblySemFileVer = GetValue("AssemblySemFileVer"));
 
-        private String _fullSemVer;
-        public String FullSemVer => _fullSemVer ?? (_fullSemVer = GetValue("FullSemVer"));
+        public String FullSemVer
+            => _fullSemVer ?? (_fullSemVer = GetValue("FullSemVer"));
 
-        private String _informationalVersion;
-        public String InformationalVersion => _informationalVersion ?? (_informationalVersion = GetValue("InformationalVersion"));
+        public String InformationalVersion
+            => _informationalVersion ?? (_informationalVersion = GetValue("InformationalVersion"));
 
-        private String _branchName;
-        public String BranchName => _branchName ?? (_branchName = GetValue("BranchName"));
+        public String BranchName
+            => _branchName ?? (_branchName = GetValue("BranchName"));
 
-        private String _sha;
-        public String Sha => _sha ?? (_sha = GetValue("Sha"));
+        public String Sha
+            => _sha ?? (_sha = GetValue("Sha"));
 
-        private String _shortSha;
-        public String ShortSha => _shortSha ?? (_shortSha = GetValue("ShortSha"));
+        public String ShortSha
+            => _shortSha ?? (_shortSha = GetValue("ShortSha"));
 
-        private String _nuGetVersionV2;
-        public String NuGetVersionV2 => _nuGetVersionV2 ?? (_nuGetVersionV2 = GetValue("NuGetVersionV2"));
+        public String NuGetVersionV2
+            => _nuGetVersionV2 ?? (_nuGetVersionV2 = GetValue("NuGetVersionV2"));
 
-        private String _nuGetVersion;
-        public String NuGetVersion => _nuGetVersion ?? (_nuGetVersion = GetValue("NuGetVersion"));
+        public String NuGetVersion
+            => _nuGetVersion ?? (_nuGetVersion = GetValue("NuGetVersion"));
 
-        private String _nuGetPreReleaseTagV2;
-        public String NuGetPreReleaseTagV2 => _nuGetPreReleaseTagV2 ?? (_nuGetPreReleaseTagV2 = GetValue("NuGetPreReleaseTagV2"));
+        public String NuGetPreReleaseTagV2
+            => _nuGetPreReleaseTagV2 ?? (_nuGetPreReleaseTagV2 = GetValue("NuGetPreReleaseTagV2"));
 
-        private String _nuGetPreReleaseTag;
-        public String NuGetPreReleaseTag => _nuGetPreReleaseTag ?? (_nuGetPreReleaseTag = GetValue("NuGetPreReleaseTag"));
+        public String NuGetPreReleaseTag
+            => _nuGetPreReleaseTag ?? (_nuGetPreReleaseTag = GetValue("NuGetPreReleaseTag"));
 
-        private String _versionSourceSha;
-        public String VersionSourceSha => _versionSourceSha ?? (_versionSourceSha = GetValue("VersionSourceSha"));
+        public String VersionSourceSha
+            => _versionSourceSha ?? (_versionSourceSha = GetValue("VersionSourceSha"));
 
-        private String _commitsSinceVersionSource;
-        public String CommitsSinceVersionSource => _commitsSinceVersionSource ?? (_commitsSinceVersionSource = GetValue("CommitsSinceVersionSource"));
+        public String CommitsSinceVersionSource
+            => _commitsSinceVersionSource ?? (_commitsSinceVersionSource = GetValue("CommitsSinceVersionSource"));
 
         private String _commitsSinceVersionSourcePadded;
-        public String CommitsSinceVersionSourcePadded => _commitsSinceVersionSourcePadded ?? (_commitsSinceVersionSourcePadded = GetValue("CommitsSinceVersionSourcePadded"));
 
-        private String _commitDate;
-        public String CommitDate => _commitDate ?? (_commitDate = GetValue("CommitDate"));
+        public String CommitsSinceVersionSourcePadded
+            => _commitsSinceVersionSourcePadded ?? (_commitsSinceVersionSourcePadded = GetValue("CommitsSinceVersionSourcePadded"));
+
+        public String CommitDate
+            => _commitDate ?? (_commitDate = GetValue("CommitDate"));
     }
 }
