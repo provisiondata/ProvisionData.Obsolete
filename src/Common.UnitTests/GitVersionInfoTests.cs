@@ -14,13 +14,6 @@ namespace ProvisionData
             gvi.Major.Should().NotBeEmpty();
             gvi.Minor.Should().NotBeEmpty();
             gvi.Patch.Should().NotBeEmpty();
-            gvi.PreReleaseTag.Should().NotBeEmpty();
-            gvi.PreReleaseTagWithDash.Should().NotBeEmpty();
-            gvi.PreReleaseLabel.Should().NotBeEmpty();
-            gvi.PreReleaseNumber.Should().NotBeEmpty();
-            gvi.WeightedPreReleaseNumber.Should().NotBeEmpty();
-            gvi.BuildMetaData.Should().NotBeEmpty();
-            gvi.BuildMetaDataPadded.Should().NotBeEmpty();
             gvi.FullBuildMetaData.Should().NotBeEmpty();
             gvi.MajorMinorPatch.Should().NotBeEmpty();
             gvi.SemVer.Should().NotBeEmpty();
@@ -35,8 +28,6 @@ namespace ProvisionData
             gvi.ShortSha.Should().NotBeEmpty();
             gvi.NuGetVersionV2.Should().NotBeEmpty();
             gvi.NuGetVersion.Should().NotBeEmpty();
-            gvi.NuGetPreReleaseTagV2.Should().NotBeEmpty();
-            gvi.NuGetPreReleaseTag.Should().NotBeEmpty();
             gvi.VersionSourceSha.Should().NotBeEmpty();
             gvi.CommitsSinceVersionSource.Should().NotBeEmpty();
             gvi.CommitsSinceVersionSourcePadded.Should().NotBeEmpty();
