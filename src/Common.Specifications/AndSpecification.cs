@@ -23,30 +23,24 @@
  *
  *******************************************************************************/
 
-namespace ProvisionData.Extensions
+namespace ProvisionData.Specifications
 {
-    using Shouldly;
     using System;
-    using System.Linq;
-    using Xunit;
 
-    public class TypeExtensionsTests
+    public class AndSpecification<T, TVisitor> : ISpecification<T, TVisitor>
+        where TVisitor : ISpecificationVisitor<TVisitor, T>
     {
-        [Fact]
-        public void GetAllProperties_returns_inherited_properties()
+        public AndSpecification(ISpecification<T, TVisitor> left, ISpecification<T, TVisitor> right)
         {
-            TypeExtensions.GetAllProperties(typeof(Foo)).Count().ShouldBe(1);
-            TypeExtensions.GetAllProperties(typeof(Bar)).Count().ShouldBe(2);
+            Left = left;
+            Right = right;
         }
 
-        private class Foo
-        {
-            public String Name { get; set; }
-        }
+        public ISpecification<T, TVisitor> Left { get; }
+        public ISpecification<T, TVisitor> Right { get; }
 
-        private class Bar : Foo
-        {
-            public Int32 Age { get; set; }
-        }
+        public void Accept(TVisitor visitor) => visitor.Visit(this);
+
+        public Boolean IsSatisfiedBy(T entity) => Left.IsSatisfiedBy(entity) && Right.IsSatisfiedBy(entity);
     }
 }

@@ -1,7 +1,7 @@
 /*******************************************************************************
  * MIT License
  *
- * Copyright 2019 Provision Data Systems Inc.  https://provisiondata.com
+ * Copyright 2020 Provision Data Systems Inc.  https://provisiondata.com
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a 
  * copy of this software and associated documentation files (the "Software"),
@@ -23,13 +23,13 @@
  *
  *******************************************************************************/
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-
 namespace ProvisionData.Extensions
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Reflection;
+
     public static class TypeExtensions
     {
         public static Guid ThrowIfEmpty(this Guid g, String parameter)

@@ -23,30 +23,26 @@
  *
  *******************************************************************************/
 
-namespace ProvisionData.Extensions
+namespace ProvisionData.Specifications
 {
-    using Shouldly;
-    using System;
-    using System.Linq;
-    using Xunit;
-
-    public class TypeExtensionsTests
+    public static class SpecificationExtensions
     {
-        [Fact]
-        public void GetAllProperties_returns_inherited_properties()
+        public static ISpecification<T, TVisitor> And<T, TVisitor>(this ISpecification<T, TVisitor> left, ISpecification<T, TVisitor> right)
+            where TVisitor : ISpecificationVisitor<TVisitor, T>
         {
-            TypeExtensions.GetAllProperties(typeof(Foo)).Count().ShouldBe(1);
-            TypeExtensions.GetAllProperties(typeof(Bar)).Count().ShouldBe(2);
+            return new AndSpecification<T, TVisitor>(left, right);
         }
 
-        private class Foo
+        public static ISpecification<T, TVisitor> Or<T, TVisitor>(this ISpecification<T, TVisitor> left, ISpecification<T, TVisitor> right)
+            where TVisitor : ISpecificationVisitor<TVisitor, T>
         {
-            public String Name { get; set; }
+            return new OrSpecification<T, TVisitor>(left, right);
         }
 
-        private class Bar : Foo
+        public static ISpecification<T, TVisitor> Not<T, TVisitor>(this ISpecification<T, TVisitor> specification)
+            where TVisitor : ISpecificationVisitor<TVisitor, T>
         {
-            public Int32 Age { get; set; }
+            return new NotSpecification<T, TVisitor>(specification);
         }
     }
 }

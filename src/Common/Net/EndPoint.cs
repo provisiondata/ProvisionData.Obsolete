@@ -1,7 +1,7 @@
 ﻿/*******************************************************************************
  * MIT License
  *
- * Copyright 2019 Provision Data Systems Inc.  https://provisiondata.com
+ * Copyright 2020 Provision Data Systems Inc.  https://provisiondata.com
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a 
  * copy of this software and associated documentation files (the "Software"),
@@ -23,10 +23,10 @@
  *
  *******************************************************************************/
 
-using System;
-
 namespace ProvisionData.Net
 {
+    using System;
+
     public readonly struct EndPoint : IEquatable<EndPoint>, IComparable<EndPoint>
     {
         public static readonly EndPoint Empty = new EndPoint();

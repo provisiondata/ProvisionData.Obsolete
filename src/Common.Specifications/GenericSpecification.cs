@@ -23,30 +23,24 @@
  *
  *******************************************************************************/
 
-namespace ProvisionData.Extensions
+namespace ProvisionData.Specifications
 {
-    using Shouldly;
     using System;
     using System.Linq;
-    using Xunit;
+    using System.Linq.Expressions;
 
-    public class TypeExtensionsTests
+    public class GenericSpecification<T>
     {
-        [Fact]
-        public void GetAllProperties_returns_inherited_properties()
+        public Expression<Func<T, Boolean>> Expression { get; }
+
+        public GenericSpecification(Expression<Func<T, Boolean>> expression)
         {
-            TypeExtensions.GetAllProperties(typeof(Foo)).Count().ShouldBe(1);
-            TypeExtensions.GetAllProperties(typeof(Bar)).Count().ShouldBe(2);
+            Expression = expression;
         }
 
-        private class Foo
+        public Boolean IsSatisfiedBy(T entity)
         {
-            public String Name { get; set; }
-        }
-
-        private class Bar : Foo
-        {
-            public Int32 Age { get; set; }
+            return Expression.Compile().Invoke(entity);
         }
     }
 }

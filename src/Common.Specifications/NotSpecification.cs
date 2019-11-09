@@ -23,30 +23,22 @@
  *
  *******************************************************************************/
 
-namespace ProvisionData.Extensions
+namespace ProvisionData.Specifications
 {
-    using Shouldly;
     using System;
-    using System.Linq;
-    using Xunit;
 
-    public class TypeExtensionsTests
+    public sealed class NotSpecification<T, TVisitor> : ISpecification<T, TVisitor>
+        where TVisitor : ISpecificationVisitor<TVisitor, T>
     {
-        [Fact]
-        public void GetAllProperties_returns_inherited_properties()
+        public NotSpecification(ISpecification<T, TVisitor> specification)
         {
-            TypeExtensions.GetAllProperties(typeof(Foo)).Count().ShouldBe(1);
-            TypeExtensions.GetAllProperties(typeof(Bar)).Count().ShouldBe(2);
+            Specification = specification;
         }
 
-        private class Foo
-        {
-            public String Name { get; set; }
-        }
+        public ISpecification<T, TVisitor> Specification { get; }
 
-        private class Bar : Foo
-        {
-            public Int32 Age { get; set; }
-        }
+        public void Accept(TVisitor visitor) => visitor.Visit(this);
+
+        public Boolean IsSatisfiedBy(T entity) => !Specification.IsSatisfiedBy(entity);
     }
 }

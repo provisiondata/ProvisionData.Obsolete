@@ -1,7 +1,7 @@
 ﻿/*******************************************************************************
  * MIT License
  *
- * Copyright 2019 Provision Data Systems Inc.  https://provisiondata.com
+ * Copyright 2020 Provision Data Systems Inc.  https://provisiondata.com
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a 
  * copy of this software and associated documentation files (the "Software"),
@@ -23,11 +23,11 @@
  *
  *******************************************************************************/
 
-using System;
-using System.Text.RegularExpressions;
-
 namespace ProvisionData
 {
+    using System;
+    using System.Text.RegularExpressions;
+
     public static class Ptn
     {
         private const String PortPattern = "([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])";

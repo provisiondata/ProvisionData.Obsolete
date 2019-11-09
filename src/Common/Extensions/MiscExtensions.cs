@@ -1,7 +1,7 @@
 ﻿/*******************************************************************************
  * MIT License
  *
- * Copyright 2019 Provision Data Systems Inc.  https://provisiondata.com
+ * Copyright 2020 Provision Data Systems Inc.  https://provisiondata.com
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a 
  * copy of this software and associated documentation files (the "Software"),
@@ -23,10 +23,10 @@
  *
  *******************************************************************************/
 
-using System;
-
 namespace ProvisionData.Extensions
 {
+    using System;
+
     public static class MiscExtensions
     {
         public static void Visit(this Exception ex, Action<Exception> action)

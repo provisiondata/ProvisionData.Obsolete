@@ -1,7 +1,7 @@
 ﻿/*******************************************************************************
  * MIT License
  *
- * Copyright 2019 Provision Data Systems Inc.  https://provisiondata.com
+ * Copyright 2020 Provision Data Systems Inc.  https://provisiondata.com
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a 
  * copy of this software and associated documentation files (the "Software"),
@@ -23,11 +23,11 @@
  *
  *******************************************************************************/
 
-using System;
-using System.Diagnostics;
-
 namespace ProvisionData
 {
+    using System;
+    using System.Diagnostics;
+
     // https://github.com/nhibernate/nhibernate-core/blob/master/src/NHibernate/Id/GuidCombGenerator.cs
     [DebuggerStepThrough]
     public static class CombGuid

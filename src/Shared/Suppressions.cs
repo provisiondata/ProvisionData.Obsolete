@@ -8,4 +8,4 @@
 // Specific
 
 // Unit Testing
-[assembly: SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>", Scope = "namespaceanddescendants", Target = "ProvisionData.Common.UnitTests")]
+[assembly: SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>", Scope = "NamespaceAndDescendants", Target = "ProvisionData.Common.UnitTests")]

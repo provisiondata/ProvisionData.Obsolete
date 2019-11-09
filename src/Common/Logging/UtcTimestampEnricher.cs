@@ -1,7 +1,7 @@
 ﻿/*******************************************************************************
  * MIT License
  *
- * Copyright 2019 Provision Data Systems Inc.  https://provisiondata.com
+ * Copyright 2020 Provision Data Systems Inc.  https://provisiondata.com
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a 
  * copy of this software and associated documentation files (the "Software"),
@@ -23,12 +23,12 @@
  *
  *******************************************************************************/
 
-using Serilog.Core;
-using Serilog.Events;
-using System;
-
 namespace ProvisionData.Logging
 {
+    using Serilog.Core;
+    using Serilog.Events;
+    using System;
+
     public class UtcTimestampEnricher : ILogEventEnricher
     {
         public void Enrich(LogEvent logEvent, ILogEventPropertyFactory propertyFactory)
