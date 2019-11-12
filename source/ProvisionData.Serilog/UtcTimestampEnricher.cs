@@ -1,6 +1,4 @@
-﻿extensions: designer.cs generated.cs
-extensions: .cs .js .cpp .h
-/*******************************************************************************
+﻿/*******************************************************************************
  * MIT License
  *
  * Copyright 2020 Provision Data Systems Inc.  https://provisiondata.com
@@ -25,7 +23,22 @@ extensions: .cs .js .cpp .h
  *
  *******************************************************************************/
 
-extensions: .aspx .ascx
-<%-- Copyright 2020 Provision Data Systems Inc. https://provisiondata.com --%>
-extensions:  .cshtml .xml .config .xsd
-<!-- Copyright 2020 Provision Data Systems Inc. https://provisiondata.com -->
+namespace ProvisionData.Logging
+{
+    using Serilog.Core;
+    using Serilog.Events;
+    using System;
+
+    public class UtcTimestampEnricher : ILogEventEnricher
+    {
+        public void Enrich(LogEvent logEvent, ILogEventPropertyFactory propertyFactory)
+        {
+            if (propertyFactory == null)
+            {
+                throw new System.ArgumentNullException(nameof(propertyFactory));
+            }
+
+            logEvent.AddPropertyIfAbsent(propertyFactory.CreateProperty("UtcTimestamp", DateTime.UtcNow));
+        }
+    }
+}

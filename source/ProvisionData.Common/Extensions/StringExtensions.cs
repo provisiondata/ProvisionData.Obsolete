@@ -1,5 +1,3 @@
-﻿extensions: designer.cs generated.cs
-extensions: .cs .js .cpp .h
 /*******************************************************************************
  * MIT License
  *
@@ -25,7 +23,34 @@ extensions: .cs .js .cpp .h
  *
  *******************************************************************************/
 
-extensions: .aspx .ascx
-<%-- Copyright 2020 Provision Data Systems Inc. https://provisiondata.com --%>
-extensions:  .cshtml .xml .config .xsd
-<!-- Copyright 2020 Provision Data Systems Inc. https://provisiondata.com -->
+namespace ProvisionData.Extensions
+{
+    using System;
+    using System.Diagnostics;
+    using System.Globalization;
+
+    [DebuggerNonUserCode]
+    public static class StringExtensions
+    {
+        internal static String Format(this String format, params Object[] args)
+            => Format(format, CultureInfo.InvariantCulture, args);
+
+        internal static String Format(this String format, IFormatProvider formatProvider, params Object[] args)
+            => String.Format(formatProvider, format, args);
+
+        public static String Quoted(this String value)
+        {
+            return value.StartsWith("\"", StringComparison.Ordinal) && value.EndsWith("\"", StringComparison.Ordinal) ? value : "\"" + value + "\"";
+        }
+
+        public static Guid ToGuid(this String value)
+        {
+            if (Guid.TryParse(value, out var guid))
+            {
+                return guid;
+            }
+
+            throw new ArgumentException($"Don't know how to parse '{value}' into a GUID.");
+        }
+    }
+}

@@ -1,6 +1,4 @@
-﻿extensions: designer.cs generated.cs
-extensions: .cs .js .cpp .h
-/*******************************************************************************
+﻿/*******************************************************************************
  * MIT License
  *
  * Copyright 2020 Provision Data Systems Inc.  https://provisiondata.com
@@ -25,7 +23,18 @@ extensions: .cs .js .cpp .h
  *
  *******************************************************************************/
 
-extensions: .aspx .ascx
-<%-- Copyright 2020 Provision Data Systems Inc. https://provisiondata.com --%>
-extensions:  .cshtml .xml .config .xsd
-<!-- Copyright 2020 Provision Data Systems Inc. https://provisiondata.com -->
+namespace ProvisionData.Specifications.Internal
+{
+    using System;
+    using System.Linq.Expressions;
+
+    public class UserHasGender : AbstractSpecification<User>
+    {
+        public UserHasGender(Gender gender) => Gender = gender;
+
+        public Gender Gender { get; }
+
+        public override Expression<Func<User, Boolean>> SpecificationExpression
+            => user => (Gender & user.Gender) != 0;
+    }
+}

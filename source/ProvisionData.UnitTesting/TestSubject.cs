@@ -1,6 +1,4 @@
-﻿extensions: designer.cs generated.cs
-extensions: .cs .js .cpp .h
-/*******************************************************************************
+﻿/*******************************************************************************
  * MIT License
  *
  * Copyright 2020 Provision Data Systems Inc.  https://provisiondata.com
@@ -25,7 +23,38 @@ extensions: .cs .js .cpp .h
  *
  *******************************************************************************/
 
-extensions: .aspx .ascx
-<%-- Copyright 2020 Provision Data Systems Inc. https://provisiondata.com --%>
-extensions:  .cshtml .xml .config .xsd
-<!-- Copyright 2020 Provision Data Systems Inc. https://provisiondata.com -->
+namespace ProvisionData.UnitTesting
+{
+    using System;
+    using AutoFixture;
+    using ProvisionData.Extensions;
+
+    public abstract class TestSubject<T> : Test
+    {
+        private readonly Lazy<T> _lazy;
+        protected T Sut => _lazy.Value;
+
+        protected TestSubject() => _lazy = new Lazy<T>(CreateSut);
+
+        protected virtual T CreateSut() => Fixture.Create<T>();
+
+        private Boolean _disposed;
+
+        protected override void Dispose(Boolean disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    if (Sut is IDisposable)
+                    {
+                        Sut.As<IDisposable>(sut => sut.Dispose());
+                    }
+                }
+
+                _disposed = true;
+            }
+            base.Dispose(disposing);
+        }
+    }
+}

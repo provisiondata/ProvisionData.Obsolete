@@ -1,6 +1,4 @@
-﻿extensions: designer.cs generated.cs
-extensions: .cs .js .cpp .h
-/*******************************************************************************
+﻿/*******************************************************************************
  * MIT License
  *
  * Copyright 2020 Provision Data Systems Inc.  https://provisiondata.com
@@ -25,7 +23,6 @@ extensions: .cs .js .cpp .h
  *
  *******************************************************************************/
 
-extensions: .aspx .ascx
-<%-- Copyright 2020 Provision Data Systems Inc. https://provisiondata.com --%>
-extensions:  .cshtml .xml .config .xsd
-<!-- Copyright 2020 Provision Data Systems Inc. https://provisiondata.com -->
+using System.Diagnostics.CodeAnalysis;
+
+[assembly: SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "Not necessary for Unit Test names")]

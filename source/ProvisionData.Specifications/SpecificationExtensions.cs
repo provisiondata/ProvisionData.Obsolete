@@ -1,6 +1,4 @@
-﻿extensions: designer.cs generated.cs
-extensions: .cs .js .cpp .h
-/*******************************************************************************
+﻿/*******************************************************************************
  * MIT License
  *
  * Copyright 2020 Provision Data Systems Inc.  https://provisiondata.com
@@ -25,7 +23,12 @@ extensions: .cs .js .cpp .h
  *
  *******************************************************************************/
 
-extensions: .aspx .ascx
-<%-- Copyright 2020 Provision Data Systems Inc. https://provisiondata.com --%>
-extensions:  .cshtml .xml .config .xsd
-<!-- Copyright 2020 Provision Data Systems Inc. https://provisiondata.com -->
+namespace ProvisionData.Specifications
+{
+    public static class SpecificationExtensions
+    {
+        public static AbstractSpecification<T> And<T>(this AbstractSpecification<T> left, AbstractSpecification<T> right) => left & right;
+
+        public static AbstractSpecification<T> Or<T>(this AbstractSpecification<T> left, AbstractSpecification<T> right) => left | right;
+    }
+}

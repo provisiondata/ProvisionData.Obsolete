@@ -1,6 +1,4 @@
-﻿extensions: designer.cs generated.cs
-extensions: .cs .js .cpp .h
-/*******************************************************************************
+﻿/*******************************************************************************
  * MIT License
  *
  * Copyright 2020 Provision Data Systems Inc.  https://provisiondata.com
@@ -25,7 +23,16 @@ extensions: .cs .js .cpp .h
  *
  *******************************************************************************/
 
-extensions: .aspx .ascx
-<%-- Copyright 2020 Provision Data Systems Inc. https://provisiondata.com --%>
-extensions:  .cshtml .xml .config .xsd
-<!-- Copyright 2020 Provision Data Systems Inc. https://provisiondata.com -->
+namespace ProvisionData.Specifications
+{
+    using System;
+    using System.Linq.Expressions;
+
+    // https://fabiomarreco.github.io/blog/2018/specificationpattern-with-entityframework/
+
+    public interface ISpecification<T>
+    {
+        Boolean IsSatisfiedBy(T entity);
+        Expression<Func<T, Boolean>> SpecificationExpression { get; }
+    }
+}

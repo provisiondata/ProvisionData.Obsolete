@@ -1,6 +1,4 @@
-﻿extensions: designer.cs generated.cs
-extensions: .cs .js .cpp .h
-/*******************************************************************************
+﻿/*******************************************************************************
  * MIT License
  *
  * Copyright 2020 Provision Data Systems Inc.  https://provisiondata.com
@@ -25,7 +23,24 @@ extensions: .cs .js .cpp .h
  *
  *******************************************************************************/
 
-extensions: .aspx .ascx
-<%-- Copyright 2020 Provision Data Systems Inc. https://provisiondata.com --%>
-extensions:  .cshtml .xml .config .xsd
-<!-- Copyright 2020 Provision Data Systems Inc. https://provisiondata.com -->
+namespace ProvisionData.Specifications
+{
+    using System;
+    using System.Linq;
+    using System.Linq.Expressions;
+
+    public class GenericSpecification<T>
+    {
+        public Expression<Func<T, Boolean>> Expression { get; }
+
+        public GenericSpecification(Expression<Func<T, Boolean>> expression)
+        {
+            Expression = expression;
+        }
+
+        public Boolean IsSatisfiedBy(T entity)
+        {
+            return Expression.Compile().Invoke(entity);
+        }
+    }
+}

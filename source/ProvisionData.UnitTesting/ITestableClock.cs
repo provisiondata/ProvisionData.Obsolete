@@ -1,6 +1,4 @@
-﻿extensions: designer.cs generated.cs
-extensions: .cs .js .cpp .h
-/*******************************************************************************
+﻿/*******************************************************************************
  * MIT License
  *
  * Copyright 2020 Provision Data Systems Inc.  https://provisiondata.com
@@ -25,7 +23,19 @@ extensions: .cs .js .cpp .h
  *
  *******************************************************************************/
 
-extensions: .aspx .ascx
-<%-- Copyright 2020 Provision Data Systems Inc. https://provisiondata.com --%>
-extensions:  .cshtml .xml .config .xsd
-<!-- Copyright 2020 Provision Data Systems Inc. https://provisiondata.com -->
+namespace ProvisionData.UnitTesting
+{
+    using System;
+    using NodaTime;
+
+    public interface ITestableClock : IClock
+    {
+        void DateIs(Instant instant);
+        void DateIs(Int32 year, Int32 monthOfYear, Int32 dayOfMonth);
+        void DateIs(Int32 year, Int32 monthOfYear, Int32 dayOfMonth, Int32 hourOfDay, Int32 minuteOfHour);
+        void DateIs(Int32 year, Int32 monthOfYear, Int32 dayOfMonth, Int32 hourOfDay, Int32 minuteOfHour, Int32 secondOfMinute);
+        void TimeIs(Int32 hourOfDay, Int32 minuteOfHour);
+        void TimeIs(Int32 hourOfDay, Int32 minuteOfHour, Int32 secondOfMinute);
+        void Reset();
+    }
+}

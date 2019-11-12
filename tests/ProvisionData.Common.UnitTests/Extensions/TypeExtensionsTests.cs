@@ -1,6 +1,4 @@
-﻿extensions: designer.cs generated.cs
-extensions: .cs .js .cpp .h
-/*******************************************************************************
+﻿/*******************************************************************************
  * MIT License
  *
  * Copyright 2020 Provision Data Systems Inc.  https://provisiondata.com
@@ -25,7 +23,30 @@ extensions: .cs .js .cpp .h
  *
  *******************************************************************************/
 
-extensions: .aspx .ascx
-<%-- Copyright 2020 Provision Data Systems Inc. https://provisiondata.com --%>
-extensions:  .cshtml .xml .config .xsd
-<!-- Copyright 2020 Provision Data Systems Inc. https://provisiondata.com -->
+namespace ProvisionData.Extensions
+{
+    using Shouldly;
+    using System;
+    using System.Linq;
+    using Xunit;
+
+    public class TypeExtensionsTests
+    {
+        [Fact]
+        public void GetAllProperties_returns_inherited_properties()
+        {
+            TypeExtensions.GetAllProperties(typeof(Foo)).Count().ShouldBe(1);
+            TypeExtensions.GetAllProperties(typeof(Bar)).Count().ShouldBe(2);
+        }
+
+        private class Foo
+        {
+            public String Name { get; set; }
+        }
+
+        private class Bar : Foo
+        {
+            public Int32 Age { get; set; }
+        }
+    }
+}

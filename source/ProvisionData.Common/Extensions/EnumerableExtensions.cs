@@ -1,6 +1,4 @@
-﻿extensions: designer.cs generated.cs
-extensions: .cs .js .cpp .h
-/*******************************************************************************
+﻿/*******************************************************************************
  * MIT License
  *
  * Copyright 2020 Provision Data Systems Inc.  https://provisiondata.com
@@ -25,7 +23,30 @@ extensions: .cs .js .cpp .h
  *
  *******************************************************************************/
 
-extensions: .aspx .ascx
-<%-- Copyright 2020 Provision Data Systems Inc. https://provisiondata.com --%>
-extensions:  .cshtml .xml .config .xsd
-<!-- Copyright 2020 Provision Data Systems Inc. https://provisiondata.com -->
+namespace ProvisionData.Extensions
+{
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+
+    [DebuggerNonUserCode]
+    public static class EnumerableExtensions
+    {
+        [DebuggerNonUserCode]
+        public static void ForEach<T>(this IEnumerable<T> items, Action<T> itemAction)
+        {
+            if (items == null)
+            {
+                throw new ArgumentNullException(nameof(items));
+            }
+            if (itemAction == null)
+            {
+                throw new ArgumentNullException(nameof(itemAction));
+            }
+            foreach (var obj in items)
+            {
+                itemAction(obj);
+            }
+        }
+    }
+}

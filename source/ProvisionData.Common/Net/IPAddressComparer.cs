@@ -1,6 +1,4 @@
-﻿extensions: designer.cs generated.cs
-extensions: .cs .js .cpp .h
-/*******************************************************************************
+﻿/*******************************************************************************
  * MIT License
  *
  * Copyright 2020 Provision Data Systems Inc.  https://provisiondata.com
@@ -25,7 +23,39 @@ extensions: .cs .js .cpp .h
  *
  *******************************************************************************/
 
-extensions: .aspx .ascx
-<%-- Copyright 2020 Provision Data Systems Inc. https://provisiondata.com --%>
-extensions:  .cshtml .xml .config .xsd
-<!-- Copyright 2020 Provision Data Systems Inc. https://provisiondata.com -->
+namespace ProvisionData.Net
+{
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    public class IPAddressComparer : IComparer<String>
+    {
+        Int32 IComparer<String>.Compare(String x, String y)
+        {
+            return IPAddressComparer.Compare(x, y);
+        }
+
+        public static Int32 Compare(String x, String y)
+        {
+            var xT = Split(x);
+            var yT = Split(y);
+
+            if (xT[0] == yT[0])
+            {
+                if (xT[1] == yT[1])
+                {
+                    if (xT[2] == yT[2])
+                    {
+                        return xT[3].CompareTo(yT[3]);
+                    }
+                    return xT[2].CompareTo(yT[2]);
+                }
+                return xT[1].CompareTo(yT[1]);
+            }
+            return xT[0].CompareTo(yT[0]);
+        }
+
+        private static Int32[] Split(String value) => value.Split('.').Select(token => Int32.Parse(token)).ToArray();
+    }
+}

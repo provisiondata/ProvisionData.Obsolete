@@ -1,6 +1,4 @@
-﻿extensions: designer.cs generated.cs
-extensions: .cs .js .cpp .h
-/*******************************************************************************
+﻿/*******************************************************************************
  * MIT License
  *
  * Copyright 2020 Provision Data Systems Inc.  https://provisiondata.com
@@ -25,7 +23,29 @@ extensions: .cs .js .cpp .h
  *
  *******************************************************************************/
 
-extensions: .aspx .ascx
-<%-- Copyright 2020 Provision Data Systems Inc. https://provisiondata.com --%>
-extensions:  .cshtml .xml .config .xsd
-<!-- Copyright 2020 Provision Data Systems Inc. https://provisiondata.com -->
+namespace ProvisionData.Logging
+{
+    using System.IO;
+    using FluentAssertions;
+    using Serilog;
+    using Xunit;
+
+    public class LoggingExtensionsTests_Serilog
+    {
+        [Fact]
+        public void Serilog_works()
+        {
+            var messages = new StringWriter();
+
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Verbose()
+                .WriteTo.TextWriter(messages)
+                .WriteTo.Debug()
+                .CreateLogger();
+
+            Log.Logger.LogVersionInfo<LoggingExtensionsTests_Serilog>();
+
+            messages.ToString().Should().NotBeNullOrWhiteSpace();
+        }
+    }
+}
