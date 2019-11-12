@@ -5,6 +5,7 @@
     <RootNamespace>ProvisionData.UnitTesting</RootNamespace>
     <AssemblyName>ProvisionData.UnitTesting</AssemblyName>
     <IsPackable>true</IsPackable>
+    <IsTestProject>false</IsTestProject>
   </PropertyGroup>
 
   <ItemGroup>
