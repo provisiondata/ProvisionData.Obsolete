@@ -104,10 +104,12 @@ namespace ProvisionData.Extensions
                         textInfo.IsFirstTextOfDocWritten.Value = textInfo.WritePrecedingWhiteSpace = true;
                     }
                     outText.Write(HtmlEntity.DeEntitize(Regex.Replace(html.TrimEnd(), @"\s{2,}", " ")));
-                    if (textInfo.LastCharWasSpace = Char.IsWhiteSpace(html[^1]))
+#pragma warning disable IDE0056 // Use index operator
+                    if (textInfo.LastCharWasSpace = Char.IsWhiteSpace(html[html.Length - 1]))
                     {
                         outText.Write(' ');
                     }
+#pragma warning restore IDE0056 // Use index operator
                     break;
                 case HtmlNodeType.Element:
                     String endElementString = null;
