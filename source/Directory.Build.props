@@ -6,7 +6,7 @@
     <Product>Provision Data</Product>
     <Authors>Doug Wilson</Authors>
     <Company>Provision Data Systems Inc.</Company>
-    <Copyright>Copyright 2019</Copyright>
+    <Copyright>Copyright 2020</Copyright>
     <ApplicationIcon>..\..\shared\pdsi.ico</ApplicationIcon>
     <PackageTags></PackageTags>
     <RepositoryType>Git</RepositoryType>
@@ -36,7 +36,7 @@
     <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="16.4.16">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="GitVersionTask" Version="5.0.1">
+    <PackageReference Include="GitVersionTask" Version="5.1.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
