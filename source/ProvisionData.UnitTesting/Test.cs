@@ -73,9 +73,7 @@ namespace ProvisionData.UnitTesting
         }
 
         protected virtual void ConfigureServices(IServiceCollection services)
-        {
-            services.AddSingleton(Clock);
-        }
+            => services.AddSingleton(Clock);
 
         protected virtual void Dispose(Boolean disposing)
         {

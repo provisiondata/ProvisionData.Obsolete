@@ -63,9 +63,7 @@ namespace ProvisionData.Extensions
         }
 
         internal static void ConvertTo(this HtmlNode node, TextWriter outText)
-        {
-            ConvertTo(node, outText, new PreceedingDomTextInfo(false));
-        }
+            => ConvertTo(node, outText, new PreceedingDomTextInfo(false));
 
         internal static void ConvertTo(this HtmlNode node, TextWriter outText, PreceedingDomTextInfo textInfo)
         {
@@ -100,7 +98,8 @@ namespace ProvisionData.Extensions
                     if (!textInfo.WritePrecedingWhiteSpace || textInfo.LastCharWasSpace)
                     {
                         html = html.TrimStart();
-                        if (html.Length == 0) { break; }
+                        if (html.Length == 0)
+                        { break; }
                         textInfo.IsFirstTextOfDocWritten.Value = textInfo.WritePrecedingWhiteSpace = true;
                     }
                     outText.Write(HtmlEntity.DeEntitize(Regex.Replace(html.TrimEnd(), @"\s{2,}", " ")));
@@ -223,14 +222,8 @@ namespace ProvisionData.Extensions
         public BoolWrapper() { }
         public Boolean Value { get; set; }
 
-        public static implicit operator Boolean(BoolWrapper boolWrapper)
-        {
-            return boolWrapper.Value;
-        }
+        public static implicit operator Boolean(BoolWrapper boolWrapper) => boolWrapper.Value;
 
-        public static implicit operator BoolWrapper(Boolean boolWrapper)
-        {
-            return new BoolWrapper { Value = boolWrapper };
-        }
+        public static implicit operator BoolWrapper(Boolean boolWrapper) => new BoolWrapper { Value = boolWrapper };
     }
 }
