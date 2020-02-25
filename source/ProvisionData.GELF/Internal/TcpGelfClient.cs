@@ -3,6 +3,7 @@
     using System;
     using System.Diagnostics;
     using System.Net.Sockets;
+    using System.Threading;
     using System.Threading.Tasks;
 
     internal class TcpGelfClient : GelfClientBase
@@ -16,7 +17,7 @@
             _client = new TcpClient();
         }
 
-        public override async Task SendMessageAsync(Message message)
+        public override async Task SendMessageAsync(Message message, CancellationToken cancellationToken = default)
         {
             if (message is null)
                 throw new ArgumentNullException(nameof(message));

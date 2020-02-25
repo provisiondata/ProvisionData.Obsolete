@@ -1,5 +1,6 @@
 ﻿namespace ProvisionData.GELF.Internal
 {
+    using System.Threading;
     using System.Threading.Tasks;
 
     internal sealed class NullClient : IGelfClient
@@ -12,6 +13,6 @@
 
         public void Dispose() { }
 
-        public Task SendMessageAsync(Message message) => Task.CompletedTask;
+        public Task SendMessageAsync(Message message, CancellationToken cancellationToken = default) => Task.CompletedTask;
     }
 }

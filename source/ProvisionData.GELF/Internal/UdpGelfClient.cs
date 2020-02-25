@@ -6,6 +6,7 @@
     using System.IO;
     using System.IO.Compression;
     using System.Net.Sockets;
+    using System.Threading;
     using System.Threading.Tasks;
 
     internal class UdpGelfClient : GelfClientBase
@@ -26,7 +27,7 @@
             _random = new Random();
         }
 
-        public override async Task SendMessageAsync(Message message)
+        public override async Task SendMessageAsync(Message message, CancellationToken cancellationToken = default)
         {
             if (message is null)
                 throw new ArgumentNullException(nameof(message));

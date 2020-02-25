@@ -3,6 +3,7 @@
     using System;
     using System.Net.Http;
     using System.Text;
+    using System.Threading;
     using System.Threading.Tasks;
 
     internal class HttpGelfClient : GelfClientBase
@@ -29,7 +30,7 @@
             }
         }
 
-        public override async Task SendMessageAsync(Message message)
+        public override async Task SendMessageAsync(Message message, CancellationToken cancellationToken = default)
         {
             var content = new StringContent(message.GetJson(), Encoding.UTF8, "application/json");
             var result = await _httpClient.PostAsync("gelf", content).ConfigureAwait(false);

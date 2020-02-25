@@ -3,6 +3,7 @@
     using System;
     using System.Net;
     using System.Net.Sockets;
+    using System.Threading;
     using System.Threading.Tasks;
 
     internal abstract class GelfClientBase : IGelfClient
@@ -31,7 +32,7 @@
                 : host;
         }
 
-        public abstract Task SendMessageAsync(Message message);
+        public abstract Task SendMessageAsync(Message message, CancellationToken cancellationToken = default);
 
         protected virtual void Dispose(Boolean disposing) { }
 
