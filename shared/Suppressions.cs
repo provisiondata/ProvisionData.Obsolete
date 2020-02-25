@@ -8,5 +8,7 @@
 // Specific
 
 // Unit Testing
-[assembly: SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>", Scope = "NamespaceAndDescendants", Target = "ProvisionData.Common.UnitTests")]
-[assembly: SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>", Scope = "NamespaceAndDescendants", Target = "ProvisionData.Specifications.IntegrationTests")]
+[assembly: SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "Not necessary for Unit Test names", Scope = "NamespaceAndDescendants", Target = "ProvisionData.UnitTests")]
+[assembly: SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "Not necessary for Unit Test names", Scope = "NamespaceAndDescendants", Target = "ProvisionData.Specifications.IntegrationTests")]
+[assembly: SuppressMessage("Style", "IDE0022:Use expression body for methods", Justification = "Not necessary for Unit Test names", Scope = "NamespaceAndDescendants", Target = "ProvisionData.UnitTests")]
+[assembly: SuppressMessage("Style", "IDE0022:Use expression body for methods", Justification = "Not necessary for Unit Test names", Scope = "NamespaceAndDescendants", Target = "ProvisionData.Specifications.IntegrationTests")]
