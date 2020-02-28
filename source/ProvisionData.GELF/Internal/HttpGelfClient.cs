@@ -25,7 +25,7 @@
             {
                 foreach (var header in options.HttpHeaders)
                 {
-                    _httpClient.DefaultRequestHeaders.Add(header.Key, header.Value);
+                    _httpClient.DefaultRequestHeaders.Add(header.Name, header.Value);
                 }
             }
         }
