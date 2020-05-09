@@ -23,34 +23,23 @@
  *
  *******************************************************************************/
 
-namespace ProvisionData.UnitTesting
+namespace ProvisionData.UnitTests.Extensions
 {
-    using AutoFixture;
+    using FluentAssertions;
+    using ProvisionData.Extensions;
     using System;
+    using Xunit;
 
-    public abstract class TestSubject<T> : Test
+    public class TextToHtmlTests
     {
-        private readonly Lazy<T> _lazy;
-        protected T Sut => _lazy.Value;
+        private const String CR = "\r\n";
 
-        protected TestSubject() => _lazy = new Lazy<T>(CreateSut);
-
-        protected virtual T CreateSut() => Fixture.Create<T>();
-
-        private Boolean _disposed;
-
-        protected override void Dispose(Boolean disposing)
+        [Theory]
+        [InlineData("Hello, World!", "<p>Hello, World!</p>")]
+        [InlineData("Hello" + CR + "World!", "<p>Hello</p>" + CR + "<p>World!</p>")]
+        public void Test(String input, String expected)
         {
-            if (!_disposed)
-            {
-                if (disposing && Sut is IDisposable disposable)
-                {
-                    disposable.Dispose();
-                }
-
-                _disposed = true;
-            }
-            base.Dispose(disposing);
+            input.ToHtmlParagraphs().Should().Be(expected);
         }
     }
 }

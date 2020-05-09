@@ -23,34 +23,56 @@
  *
  *******************************************************************************/
 
-namespace ProvisionData.UnitTesting
+namespace ProvisionData
 {
-    using AutoFixture;
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
 
-    public abstract class TestSubject<T> : Test
+    // https://enterprisecraftsmanship.com/posts/value-object-better-implementation/
+    public abstract class ValueObject
     {
-        private readonly Lazy<T> _lazy;
-        protected T Sut => _lazy.Value;
+        protected abstract IEnumerable<Object> GetEqualityComponents();
 
-        protected TestSubject() => _lazy = new Lazy<T>(CreateSut);
-
-        protected virtual T CreateSut() => Fixture.Create<T>();
-
-        private Boolean _disposed;
-
-        protected override void Dispose(Boolean disposing)
+        public override Boolean Equals(Object obj)
         {
-            if (!_disposed)
-            {
-                if (disposing && Sut is IDisposable disposable)
-                {
-                    disposable.Dispose();
-                }
+            if (obj == null)
+                return false;
 
-                _disposed = true;
-            }
-            base.Dispose(disposing);
+            if (GetType() != obj.GetType())
+                return false;
+
+            var valueObject = (ValueObject)obj;
+
+            return GetEqualityComponents().SequenceEqual(valueObject.GetEqualityComponents());
+        }
+
+        public override Int32 GetHashCode()
+        {
+            return GetEqualityComponents()
+                .Aggregate(1, (current, obj) =>
+                {
+                    unchecked
+                    {
+                        return (current * 23) + (obj?.GetHashCode() ?? 0);
+                    }
+                });
+        }
+
+        public static Boolean operator ==(ValueObject a, ValueObject b)
+        {
+            if (a is null && b is null)
+                return true;
+
+            if (a is null || b is null)
+                return false;
+
+            return a.Equals(b);
+        }
+
+        public static Boolean operator !=(ValueObject a, ValueObject b)
+        {
+            return !(a == b);
         }
     }
 }

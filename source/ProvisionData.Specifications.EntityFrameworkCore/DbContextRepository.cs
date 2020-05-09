@@ -23,34 +23,50 @@
  *
  *******************************************************************************/
 
-namespace ProvisionData.UnitTesting
+namespace ProvisionData.Specifications.EntityFrameworkCore
 {
-    using AutoFixture;
+    using Microsoft.EntityFrameworkCore;
+    using ProvisionData.Specifications;
+    using ProvisionData.Specifications.Internal;
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
 
-    public abstract class TestSubject<T> : Test
+    public class DbContextRepository<TEntity, TContext> : IRepository<TEntity>
+        where TEntity : class
+        where TContext : DbContext
     {
-        private readonly Lazy<T> _lazy;
-        protected T Sut => _lazy.Value;
-
-        protected TestSubject() => _lazy = new Lazy<T>(CreateSut);
-
-        protected virtual T CreateSut() => Fixture.Create<T>();
-
+        private readonly TContext _dbContext;
         private Boolean _disposed;
 
-        protected override void Dispose(Boolean disposing)
+        public DbContextRepository(TContext dbContext)
+        {
+            _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+        }
+
+        public async Task<IReadOnlyList<TEntity>> ListAsync(IQueryableSpecification<TEntity>? specification = null)
+        {
+            var query = _dbContext.Set<TEntity>() as IQueryable<TEntity>;
+            if (specification != null)
+            {
+                query = query.Where(specification.Predicate);
+            }
+            return await query.ToListAsync().ConfigureAwait(false);
+        }
+
+        protected virtual void Dispose(Boolean disposing)
         {
             if (!_disposed)
             {
-                if (disposing && Sut is IDisposable disposable)
-                {
-                    disposable.Dispose();
-                }
+                //if (disposing)
+                //{
+                //}
 
                 _disposed = true;
             }
-            base.Dispose(disposing);
         }
+
+        public void Dispose() => Dispose(true);
     }
 }
