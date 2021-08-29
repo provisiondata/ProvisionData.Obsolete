@@ -23,17 +23,37 @@
  *
  *******************************************************************************/
 
-namespace ProvisionData.GELF
+namespace ProvisionData.Specifications
 {
-	public enum Level
-    {
-        Emergency = 0,
-        Alert = 1,
-        Critical = 2,
-        Error = 3,
-        Warning = 4,
-        Notice = 5,
-        Informational = 6,
-        Debug = 7
-    }
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Linq.Expressions;
+
+	public static class QueryableExtensions
+	{
+		const String OrderBy = "OrderBy";
+		const String ThenBy = "ThenBy";
+		const String OrderByDesc = "OrderByDescending";
+		const String ThenByDesc = "ThenByDescending";
+
+		public static IQueryable<T> SortBy<T>(this IQueryable<T> source, IEnumerable<SortBy> sortModels)
+		{
+			var expression = source.Expression;
+			Int32 count = 0;
+			foreach (var item in sortModels)
+			{
+				var parameter = Expression.Parameter(typeof(T), "x");
+				var selector = Expression.PropertyOrField(parameter, item.PropertyName);
+				var method = item.Descending ?
+					(count == 0 ? OrderByDesc : ThenByDesc) :
+					(count == 0 ? OrderBy : ThenBy);
+				expression = Expression.Call(typeof(Queryable), method, 
+					new Type[] { source.ElementType, selector.Type }, expression, 
+					Expression.Quote(Expression.Lambda(selector, parameter)));
+				count++;
+			}
+			return count > 0 ? source.Provider.CreateQuery<T>(expression) : source;
+		}
+	}
 }

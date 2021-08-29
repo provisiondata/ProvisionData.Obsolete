@@ -1,6 +1,6 @@
 # ProvisionData.Common
 
-# ProvisionData.EntityFramework
+# ProvisionData.EntityFrameworkCore
 
 # ProvisionData.GELF
 

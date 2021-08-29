@@ -23,17 +23,20 @@
  *
  *******************************************************************************/
 
-namespace ProvisionData.GELF
+namespace ProvisionData.EntityFrameworkCore
 {
-	public enum Level
-    {
-        Emergency = 0,
-        Alert = 1,
-        Critical = 2,
-        Error = 3,
-        Warning = 4,
-        Notice = 5,
-        Informational = 6,
-        Debug = 7
-    }
+	using Bogus;
+	using Microsoft.EntityFrameworkCore;
+	using ProvisionData.EntityFrameworkCore.Auditing;
+	using System;
+
+	public sealed class TestDbContext : AuditedDbContext
+	{
+		public TestDbContext(DbContextOptions<TestDbContext> options) : base(options) {
+		}
+
+		public DbSet<FamilyMember> Members { get; set; }
+
+		public override String GetUsername() => new Faker().Person.FullName;
+	}
 }

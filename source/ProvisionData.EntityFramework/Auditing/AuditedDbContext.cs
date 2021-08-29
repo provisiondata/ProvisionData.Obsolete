@@ -23,17 +23,40 @@
  *
  *******************************************************************************/
 
-namespace ProvisionData.GELF
+namespace ProvisionData.EntityFrameworkCore.Auditing
 {
-	public enum Level
-    {
-        Emergency = 0,
-        Alert = 1,
-        Critical = 2,
-        Error = 3,
-        Warning = 4,
-        Notice = 5,
-        Informational = 6,
-        Debug = 7
-    }
+	using Microsoft.EntityFrameworkCore;
+	using System;
+	using System.Diagnostics.CodeAnalysis;
+	using System.Linq;
+	using System.Threading;
+	using System.Threading.Tasks;
+
+	public abstract class AuditedDbContext : DbContext, IAuditedDbContext
+	{
+		public AuditedDbContext(DbContextOptions options) : base(options) { }
+
+		public DbSet<AuditEntry> AuditLogs { get; set; }
+
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
+			=> base.OnModelCreating(modelBuilder.ConfigureAuditLog());
+
+		[SuppressMessage("Usage", "VSTHRD103:Call async methods when in an async method", Justification = "Only need to use the async method when an async value generator is used.")]
+		public override async Task<Int32> SaveChangesAsync(CancellationToken cancellationToken = default)
+		{
+			var entries = this.GetAuditEntries(GetUsername());
+			var normal = entries.Normal();
+			AuditLogs.AddRange(normal);
+			var result = await base.SaveChangesAsync(true, cancellationToken).ConfigureAwait(true);
+			if (entries.Temporary().Any())
+			{
+				var temporary = entries.Temporary();
+				AuditLogs.AddRange(temporary);
+				await base.SaveChangesAsync(cancellationToken).ConfigureAwait(true);
+			}
+			return result;
+		}
+
+		public abstract String GetUsername();
+	}
 }

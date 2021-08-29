@@ -23,17 +23,19 @@
  *
  *******************************************************************************/
 
-namespace ProvisionData.GELF
+namespace ProvisionData.Specifications
 {
-	public enum Level
-    {
-        Emergency = 0,
-        Alert = 1,
-        Critical = 2,
-        Error = 3,
-        Warning = 4,
-        Notice = 5,
-        Informational = 6,
-        Debug = 7
-    }
+	using System;
+
+	public class SortBy
+	{
+		public SortBy(String propertyName, Boolean descending = false)
+		{
+			PropertyName = propertyName ?? throw new ArgumentNullException(nameof(propertyName));
+			Descending = descending;
+		}
+
+		public String PropertyName { get; }
+		public Boolean Descending { get; }
+	}
 }

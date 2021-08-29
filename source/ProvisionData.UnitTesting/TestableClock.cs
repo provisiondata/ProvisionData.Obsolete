@@ -25,12 +25,11 @@
 
 namespace ProvisionData.UnitTesting
 {
-    using System;
-    using NodaTime;
-    using NodaTime.Testing;
-    using ProvisionData.Extensions;
+	using System;
+	using NodaTime;
+	using NodaTime.Testing;
 
-    internal class TestableClock : ITestableClock
+	internal class TestableClock : ITestableClock
     {
         private IClock _clock;
 

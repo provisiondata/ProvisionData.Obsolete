@@ -23,17 +23,19 @@
  *
  *******************************************************************************/
 
-namespace ProvisionData.GELF
+namespace ProvisionData.EntityFrameworkCore.Auditing
 {
-	public enum Level
-    {
-        Emergency = 0,
-        Alert = 1,
-        Critical = 2,
-        Error = 3,
-        Warning = 4,
-        Notice = 5,
-        Informational = 6,
-        Debug = 7
-    }
+	using Microsoft.EntityFrameworkCore;
+	using Microsoft.EntityFrameworkCore.ChangeTracking;
+	using System;
+	using System.Threading;
+	using System.Threading.Tasks;
+
+	public interface IAuditedDbContext
+	{
+		DbSet<AuditEntry> AuditLogs { get; set; }
+		ChangeTracker ChangeTracker { get; }
+		String GetUsername();
+		Task<Int32> SaveChangesAsync(CancellationToken cancellationToken = default);
+	}
 }

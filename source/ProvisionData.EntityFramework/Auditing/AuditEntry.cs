@@ -23,17 +23,24 @@
  *
  *******************************************************************************/
 
-namespace ProvisionData.GELF
+namespace ProvisionData.EntityFrameworkCore.Auditing
 {
-	public enum Level
-    {
-        Emergency = 0,
-        Alert = 1,
-        Critical = 2,
-        Error = 3,
-        Warning = 4,
-        Notice = 5,
-        Informational = 6,
-        Debug = 7
-    }
+	using System;
+	using System.ComponentModel.DataAnnotations;
+
+	public class AuditEntry
+	{
+		public Int32 Id { get; set; }
+		public DateTime DateTime { get; set; }
+		public String Username { get; set; }
+		public AuditAction Action { get; set; }
+		public String Table { get; set; }
+		public String Changed { get; set; }
+		public String PrimaryKey { get; set; }
+		public String Previous { get; set; }
+		public String Current { get; set; }
+		public String Type { get; set; }
+
+		public Byte[] RowVersion { get; set; }
+	}
 }

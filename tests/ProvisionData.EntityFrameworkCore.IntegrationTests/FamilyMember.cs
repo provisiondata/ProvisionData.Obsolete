@@ -23,17 +23,23 @@
  *
  *******************************************************************************/
 
-namespace ProvisionData.GELF
+namespace ProvisionData.EntityFrameworkCore
 {
-	public enum Level
-    {
-        Emergency = 0,
-        Alert = 1,
-        Critical = 2,
-        Error = 3,
-        Warning = 4,
-        Notice = 5,
-        Informational = 6,
-        Debug = 7
-    }
+	using System;
+
+	public class FamilyMember
+	{
+		public FamilyMember() { }
+
+		public FamilyMember(Guid uid, String name, DateTime dateOfBirth)
+		{
+			Id = uid;
+			Name = name ?? throw new ArgumentNullException(nameof(name));
+			DateOfBirth = dateOfBirth;
+		}
+
+		public Guid Id { get; set; }
+		public String Name { get; set; }
+		public DateTime DateOfBirth { get; set; }
+	}
 }

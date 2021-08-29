@@ -23,7 +23,7 @@
  *
  *******************************************************************************/
 
-namespace ProvisionData.EntityFramework
+namespace ProvisionData.EntityFrameworkCore
 {
     using Microsoft.EntityFrameworkCore;
     using System;
