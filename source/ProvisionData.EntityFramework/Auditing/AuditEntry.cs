@@ -26,21 +26,19 @@
 namespace ProvisionData.EntityFrameworkCore.Auditing
 {
 	using System;
-	using System.ComponentModel.DataAnnotations;
 
+	[Audit(ignore: true)]
 	public class AuditEntry
 	{
 		public Int32 Id { get; set; }
 		public DateTime DateTime { get; set; }
-		public String Username { get; set; }
+		public String User { get; set; }
 		public AuditAction Action { get; set; }
-		public String Table { get; set; }
+		public String Entity { get; set; }
 		public String Changed { get; set; }
 		public String PrimaryKey { get; set; }
 		public String Previous { get; set; }
 		public String Current { get; set; }
 		public String Type { get; set; }
-
-		public Byte[] RowVersion { get; set; }
 	}
 }

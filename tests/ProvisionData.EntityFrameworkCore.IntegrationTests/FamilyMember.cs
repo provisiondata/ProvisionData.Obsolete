@@ -25,6 +25,7 @@
 
 namespace ProvisionData.EntityFrameworkCore
 {
+	using ProvisionData.EntityFrameworkCore.Auditing;
 	using System;
 
 	public class FamilyMember
@@ -41,5 +42,23 @@ namespace ProvisionData.EntityFrameworkCore
 		public Guid Id { get; set; }
 		public String Name { get; set; }
 		public DateTime DateOfBirth { get; set; }
+		[Audit(ignore: true)]
+		public String Ignored { get; set; } = String.Empty;
+		[Audit(sensitive: true)]
+		public String Sensitive { get; set; } = String.Empty;
+	}
+
+	[Audit]
+	public class IgnoredClass
+	{
+		public Guid Id { get; set; } = Guid.NewGuid();
+	}
+
+	public enum Gender
+	{
+		Unspecified,
+		Male,
+		Female,
+		Undisclosed
 	}
 }

@@ -44,7 +44,7 @@ namespace ProvisionData.EntityFrameworkCore
 			new FamilyMember(Guid.NewGuid(), "Charmaine", new DateTime(1975, 11, 11)),
 			new FamilyMember(Guid.NewGuid(), "Shyloh", new DateTime(2007, 10, 15)),
 			new FamilyMember(Guid.NewGuid(), "Piper", new DateTime(2008, 5, 19)),
-			new FamilyMember(Guid.NewGuid(), "Geordi", new DateTime(2011, 9, 14))
+			new FamilyMember(Guid.NewGuid(), "Geordi", new DateTime(2011, 9, 14)) { Sensitive = "This property is Sensitive.", Ignored ="This should be ignored." }
 		};
 
 		private DbConnection _connection;

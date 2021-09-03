@@ -31,9 +31,9 @@ namespace ProvisionData.EntityFrameworkCore.Auditing
 	using System.Linq;
 	using System.Text.Json;
 
-	internal class AuditEntryDto
+	internal class AuditEntryMetaData
 	{
-		public AuditEntryDto(EntityEntry entry)
+		public AuditEntryMetaData(EntityEntry entry)
 		{
 			Entry = entry;
 		}
@@ -42,11 +42,11 @@ namespace ProvisionData.EntityFrameworkCore.Auditing
 		public DateTime DateTime { get; set; } = DateTime.UtcNow;
 		public String Username { get; set; }
 		public AuditAction Action { get; set; }
-		public String Table { get; set; }
-		public List<String> Columns { get; } = new List<String>();
+		public String Entity { get; set; }
+		public List<String> Changed { get; } = new List<String>();
 		public Dictionary<String, Object> KeyValues { get; } = new Dictionary<String, Object>();
-		public Dictionary<String, Object> Old { get; } = new Dictionary<String, Object>();
-		public Dictionary<String, Object> New { get; } = new Dictionary<String, Object>();
+		public Dictionary<String, Object> Previous { get; } = new Dictionary<String, Object>();
+		public Dictionary<String, Object> Current { get; } = new Dictionary<String, Object>();
 		public Type Type { get; set; }
 		public List<PropertyEntry> TemporaryProperties { get; } = new List<PropertyEntry>();
 		public Boolean HasTemporaryProperties => TemporaryProperties.Any();
@@ -54,14 +54,14 @@ namespace ProvisionData.EntityFrameworkCore.Auditing
 		public AuditEntry ToDto() => new()
 		{
 			DateTime = DateTime,
-			Username = Username,
+			User = Username,
 			Action = Action,
-			Table = Table,
-			Changed = Columns.Count == 0 ? null : JsonSerializer.Serialize(Columns),
+			Entity = Entity,
+			Changed = Changed.Count == 0 ? null : JsonSerializer.Serialize(Changed),
 			PrimaryKey = JsonSerializer.Serialize(KeyValues),
-			Previous = Old.Count == 0 ? null : JsonSerializer.Serialize(Old),
-			Current = New.Count == 0 ? null : JsonSerializer.Serialize(New),
-			Type = Type.AssemblyQualifiedName
+			Previous = Previous.Count == 0 ? null : JsonSerializer.Serialize(Previous),
+			Current = Current.Count == 0 ? null : JsonSerializer.Serialize(Current),
+			Type = $"{Type.FullName}, {Type.Assembly.GetName().Name}"
 		};
 	}
 }
