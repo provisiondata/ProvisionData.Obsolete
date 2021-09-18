@@ -26,6 +26,9 @@
 namespace ProvisionData.EntityFrameworkCore.Auditing
 {
 	using Microsoft.EntityFrameworkCore;
+	using Microsoft.EntityFrameworkCore.Infrastructure;
+	using Microsoft.Extensions.DependencyInjection;
+	using Microsoft.Extensions.Logging;
 	using System;
 	using System.Diagnostics.CodeAnalysis;
 	using System.Linq;
@@ -34,7 +37,15 @@ namespace ProvisionData.EntityFrameworkCore.Auditing
 
 	public abstract class AuditedDbContext : DbContext, IAuditedDbContext
 	{
-		public AuditedDbContext(DbContextOptions options) : base(options) { }
+		private readonly ILogger _logger;
+
+		public AuditedDbContext(DbContextOptions options) : base(options)
+		{
+			if (this is IInfrastructure<IServiceProvider> infrastructure)
+			{
+				_logger = infrastructure.Instance.GetService<ILogger<AuditedDbContext>>();
+			}
+		}
 
 		public DbSet<AuditEntry> AuditLogs { get; set; }
 
@@ -44,17 +55,26 @@ namespace ProvisionData.EntityFrameworkCore.Auditing
 		[SuppressMessage("Usage", "VSTHRD103:Call async methods when in an async method", Justification = "Only need to use the async method when an async value generator is used.")]
 		public override async Task<Int32> SaveChangesAsync(CancellationToken cancellationToken = default)
 		{
-			var entries = this.GetAuditEntries(GetUsername());
-			var normal = entries.Normal();
-			AuditLogs.AddRange(normal);
-			var result = await base.SaveChangesAsync(true, cancellationToken).ConfigureAwait(true);
-			if (entries.Temporary().Any())
+			try
 			{
-				var temporary = entries.Temporary();
-				AuditLogs.AddRange(temporary);
-				await base.SaveChangesAsync(cancellationToken).ConfigureAwait(true);
+				var entries = this.GetAuditEntries(GetUsername());
+				var normal = entries.Normal();
+				AuditLogs.AddRange(normal);
+				var result = await base.SaveChangesAsync(true, cancellationToken).ConfigureAwait(true);
+				if (entries.Temporary().Any())
+				{
+					var temporary = entries.Temporary();
+					AuditLogs.AddRange(temporary);
+					await base.SaveChangesAsync(cancellationToken).ConfigureAwait(true);
+				}
+				return result;
+
 			}
-			return result;
+			catch (DbUpdateException ex)
+			{
+				_logger?.LogCritical(ex, "{Exception} occurred during SaveChangesAsync(): {Message}", ex.GetType(), ex.Message);
+				throw;
+			}
 		}
 
 		public abstract String GetUsername();

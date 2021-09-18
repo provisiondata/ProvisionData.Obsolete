@@ -25,6 +25,7 @@
 
 namespace ProvisionData.EntityFrameworkCore
 {
+	using Bogus;
 	using Microsoft.Data.Sqlite;
 	using Microsoft.EntityFrameworkCore;
 	using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -46,6 +47,8 @@ namespace ProvisionData.EntityFrameworkCore
 			new FamilyMember(Guid.NewGuid(), "Piper", new DateTime(2008, 5, 19)),
 			new FamilyMember(Guid.NewGuid(), "Geordi", new DateTime(2011, 9, 14)) { Sensitive = "This property is Sensitive.", Ignored ="This should be ignored." }
 		};
+
+		protected static readonly Faker Faker = new();
 
 		private DbConnection _connection;
 

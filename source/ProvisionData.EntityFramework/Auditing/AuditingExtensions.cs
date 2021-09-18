@@ -68,7 +68,8 @@ namespace ProvisionData.EntityFrameworkCore.Auditing
 		{
 			var list = new List<AuditEntryMetaData>();
 			dbContext.ChangeTracker.DetectChanges();
-			foreach (var entity in dbContext.ChangeTracker.Entries())
+			var entities = dbContext.ChangeTracker.Entries();
+			foreach (var entity in entities)
 			{
 				if (IsIgnored(entity))
 				{
@@ -170,7 +171,7 @@ namespace ProvisionData.EntityFrameworkCore.Auditing
 			{
 				var info = GetPropertyInfo(property);
 
-				if (property.Metadata.IsConcurrencyToken || info.PropertyType.IsArray)
+				if (property.Metadata.IsConcurrencyToken || info is null || info.PropertyType.IsArray)
 					return true;
 
 				var attr = info.GetCustomAttribute<AuditAttribute>();
@@ -181,8 +182,8 @@ namespace ProvisionData.EntityFrameworkCore.Auditing
 
 		private static PropertyInfo GetPropertyInfo(PropertyEntry property)
 		{
-			var eType = property.EntityEntry.Entity.GetType();
-			var pType = eType.GetProperty(property.Metadata.Name);
+			var entityType = property.EntityEntry.Entity.GetType();
+			var pType = entityType.GetProperty(property.Metadata.Name);
 			return pType;
 		}
 
@@ -190,6 +191,9 @@ namespace ProvisionData.EntityFrameworkCore.Auditing
 			=> SensitiveCache.GetOrAdd(GetKey(property), (k) =>
 			{
 				var info = GetPropertyInfo(property);
+				if (info is null)
+					return false;
+
 				var attr = info.GetCustomAttribute<AuditAttribute>();
 				var result = attr is not null && attr.Sensitive == true;
 				return result;

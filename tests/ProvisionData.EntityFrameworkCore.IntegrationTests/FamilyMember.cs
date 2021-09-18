@@ -27,9 +27,12 @@ namespace ProvisionData.EntityFrameworkCore
 {
 	using ProvisionData.EntityFrameworkCore.Auditing;
 	using System;
+	using System.Collections.Generic;
 
 	public class FamilyMember
 	{
+		public static readonly String TypeName = $"{typeof(FamilyMember).FullName}, {typeof(FamilyMember).Assembly.GetName().Name}";
+
 		public FamilyMember() { }
 
 		public FamilyMember(Guid uid, String name, DateTime dateOfBirth)
@@ -42,6 +45,9 @@ namespace ProvisionData.EntityFrameworkCore
 		public Guid Id { get; set; }
 		public String Name { get; set; }
 		public DateTime DateOfBirth { get; set; }
+
+		public virtual ICollection<String> FavoriteFoods { get; } = new List<String>();
+
 		[Audit(ignore: true)]
 		public String Ignored { get; set; } = String.Empty;
 		[Audit(sensitive: true)]

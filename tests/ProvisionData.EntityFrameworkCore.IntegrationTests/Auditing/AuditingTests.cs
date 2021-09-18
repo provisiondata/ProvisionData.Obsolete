@@ -25,10 +25,11 @@
 
 namespace ProvisionData.EntityFrameworkCore.Auditing
 {
-	using Bogus.DataSets;
+	using Bogus;
 	using FluentAssertions;
 	using Microsoft.EntityFrameworkCore;
 	using System;
+	using System.Collections.Generic;
 	using System.Linq;
 	using System.Threading.Tasks;
 	using Xunit;
@@ -36,6 +37,8 @@ namespace ProvisionData.EntityFrameworkCore.Auditing
 
 	public class AuditingTests : IntegrationTestBase
 	{
+		private readonly List<Product> Products = new();
+
 		public AuditingTests(ITestOutputHelper output) : base()
 		{
 			Output = output;
@@ -48,15 +51,29 @@ namespace ProvisionData.EntityFrameworkCore.Auditing
 		}
 
 		public ITestOutputHelper Output { get; }
+		public Customer Customer { get; private set; }
+
+		protected override async Task SeedAsync(TestDbContext dbContext)
+		{
+			using (var db = new TestDbContext(ContextOptions))
+			{
+				Customer = Customer.Fake();
+				db.Customers.Add(Customer);
+
+				Products.AddRange(Faker.Make(10, Product.Fake));
+				db.Products.AddRange(Products);
+
+				await db.SaveChangesAsync().ConfigureAwait(false);
+			}
+
+			await base.SeedAsync(dbContext);
+		}
 
 		[Fact]
 		public async Task Adding()
 		{
 			using (var db = new TestDbContext(ContextOptions))
 			{
-				// Sanity check
-				(await db.AuditLogs.CountAsync()).Should().Be(5);
-
 				// Act
 				var ziva = new FamilyMember(Guid.NewGuid(), "Ziva", new DateTime(2015, 07, 01));
 				db.Members.Add(ziva);
@@ -152,7 +169,10 @@ namespace ProvisionData.EntityFrameworkCore.Auditing
 			using (var db = new TestDbContext(ContextOptions))
 			{
 				// Assert
-				var entries = await db.AuditLogs.OrderByDescending(e => e.DateTime).ToListAsync();
+				var entries = await db.AuditLogs
+					.Where(e => e.Type == FamilyMember.TypeName)
+					.OrderByDescending(e => e.DateTime)
+					.ToListAsync();
 
 				foreach (var entry in entries)
 				{
@@ -161,6 +181,33 @@ namespace ProvisionData.EntityFrameworkCore.Auditing
 				}
 
 				entries.Count.Should().Be(8);
+			}
+		}
+
+
+		[Fact]
+		public async Task Sequential_Saves()
+		{
+			using (var db = new TestDbContext(ContextOptions))
+			{
+				var invoice = Invoice.Fake();
+				invoice.CustomerId = Customer.Id;
+				db.Invoices.Add(invoice);
+				await db.SaveChangesAsync();
+
+				var p = Products[0];
+				invoice.LineItems.Add(new LineItem() { Name = p.Name, Description = p.Description, UnitPrice = p.UnitPrice, ProductID = p.Id });
+				db.Invoices.Update(invoice);
+				await db.SaveChangesAsync();
+			}
+
+			using (var db = new TestDbContext(ContextOptions))
+			{
+				// Assert
+				var entries = await db.AuditLogs.OrderByDescending(e => e.DateTime).ToListAsync();
+
+				entries.ForEach(LogEntry);
+				entries.First().Action.Should().Be(AuditAction.Updated);
 			}
 		}
 
