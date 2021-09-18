@@ -25,11 +25,10 @@
 
 namespace ProvisionData.EntityFrameworkCore
 {
+	using Microsoft.Data.SqlClient;
 	using Microsoft.EntityFrameworkCore;
 	using Microsoft.EntityFrameworkCore.Design;
 	using System;
-	using System.Data.Common;
-	using System.Data.SqlClient;
 
 	public class SqlServerTestDbContextFactory : IDesignTimeDbContextFactory<TestDbContext>
 	{
@@ -39,14 +38,12 @@ namespace ProvisionData.EntityFrameworkCore
 		{
 			var builder = new DbContextOptionsBuilder<TestDbContext>();
 
-			builder.UseSqlServer(GetDbConnection(), options => options.MigrationsAssembly(typeof(SqlServerTestDbContextFactory).Assembly.FullName))
+			builder.UseSqlServer(new SqlConnection(ConnectionString), options => options.MigrationsAssembly(typeof(SqlServerTestDbContextFactory).Assembly.FullName))
 				   .EnableSensitiveDataLogging(true);
 
 			return builder.Options;
 		}
 
 		public TestDbContext CreateDbContext(String[] args) => new(GetOptions());
-
-		public static DbConnection GetDbConnection() => new SqlConnection(ConnectionString);
 	}
 }
