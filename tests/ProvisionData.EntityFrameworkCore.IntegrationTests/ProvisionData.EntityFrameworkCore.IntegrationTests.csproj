@@ -8,12 +8,16 @@
 
 	<ItemGroup>
 		<PackageReference Include="Bogus" Version="33.1.1" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.9" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.9">
+		<PackageReference Include="Bogus.Tools.Analyzer" Version="33.1.1">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.9" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.10" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.10">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.10" />
 		<PackageReference Include="Microsoft.VisualStudio.Shell.Framework" Version="16.10.31321.278" />
 		<PackageReference Include="Microsoft.VisualStudio.Threading" Version="16.10.56" />
 	</ItemGroup>

@@ -7,6 +7,14 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <PackageReference Include="Bogus" Version="33.1.1" />
+	  <PackageReference Include="Bogus.Tools.Analyzer" Version="33.1.1">
+	    <PrivateAssets>all</PrivateAssets>
+	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
 		<ProjectReference Include="..\..\source\ProvisionData.GELF\ProvisionData.GELF.csproj" />
 	</ItemGroup>
 
