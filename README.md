@@ -1,13 +1,18 @@
-# ProvisionData.Common
+# ProvisionData.Obsolete ![GitHub](https://img.shields.io/github/license/provisiondata/ProvisionData.Obsolete)
 
-# ProvisionData.EntityFrameworkCore
+Code we wrote that we no longer maintain but aren't quite ready to throw away. 
 
-# ProvisionData.GELF
 
-# ProvisionData.Html
+## ProvisionData.Html ![Nuget](https://img.shields.io/nuget/v/ProvisionData.Html)
 
-# ProvisionData.Serilog
+Some variations on HTML to Text and Text to HTML
 
-# ProvisionData.Specifications
 
-# ProvisionData.UnitTesting
+## ProvisionData.Serilog ![Nuget](https://img.shields.io/nuget/v/ProvisionData.Serilog)
+
+Contains `UtcTimestampEnricher`, `LogVersionInfo<T>()`
+
+
+## ProvisionData.UnitTesting ![Nuget](https://img.shields.io/nuget/v/ProvisionData.UnitTesting)
+
+Some mocks and test frameworks.

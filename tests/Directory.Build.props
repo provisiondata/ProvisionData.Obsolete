@@ -6,7 +6,7 @@
 		<Product>Provision Data</Product>
 		<Authors>Doug Wilson</Authors>
 		<Company>Provision Data Systems Inc.</Company>
-		<Copyright>Copyright 2019</Copyright>
+		<Copyright>Copyright 2021</Copyright>
 		<ApplicationIcon>..\..\shared\pdsi.ico</ApplicationIcon>
 		<PackageTags></PackageTags>
 		<RepositoryType>Git</RepositoryType>
@@ -49,12 +49,12 @@
 		<PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<PackageReference Update="Microsoft.VisualStudio.Threading.Analyzers" Version="16.10.56">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-	</ItemGroup>
+  <ItemGroup>
+    <PackageReference Update="Microsoft.VisualStudio.Threading.Analyzers" Version="17.0.63">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="xunit" Version="2.4.1" />
@@ -71,9 +71,6 @@
 	<ItemGroup>
 		<Compile Include="..\..\shared\AssemblyInfo.cs">
 			<Link>Properties\SharedAssemblyInfo.cs</Link>
-		</Compile>
-		<Compile Include="..\..\shared\UnitTestSuppressions.cs">
-			<Link>GlobalSharedSuppressions.cs</Link>
 		</Compile>
 	</ItemGroup>
 

@@ -1,4 +1,4 @@
 {
   "$schema": "./build.schema.json",
-  "Solution": "Common.sln"
+  "Solution": "ProvisionData.sln"
 }

@@ -1,4 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-[assembly: SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "Not necessary for Unit Test names", Scope = "NamespaceAndDescendants", Target = "~N:ProvisionData.EntityFrameworkCore")]
+[assembly: SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "Not necessary for Unit Test names", Scope = "mu", Target = "~N:ProvisionData.EntityFrameworkCore")]
 

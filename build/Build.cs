@@ -44,16 +44,11 @@ class Build : NukeBuild
 	AbsolutePath OutputDirectory => RootDirectory / "output";
 
 
-	Project Common => Solution.GetProject("ProvisionData.Common");
-	Project EFCore => Solution.GetProject("ProvisionData.EntityFrameworkCore");
-	Project GELF => Solution.GetProject("ProvisionData.GELF");
 	Project HTML => Solution.GetProject("ProvisionData.Html");
 	Project Serilog => Solution.GetProject("ProvisionData.Serilog");
-	Project Specs => Solution.GetProject("ProvisionData.Specifications");
-	Project SpecsEFCore => Solution.GetProject("ProvisionData.Specifications.EntityFrameworkCore");
 	Project Testing => Solution.GetProject("ProvisionData.UnitTesting");
 
-	Project[] Projects => new[] { Common, EFCore, GELF, HTML, Serilog, Specs, SpecsEFCore, Testing };
+	Project[] Projects => new[] { HTML, Serilog, Testing };
 
 	Target Clean => _ => _
 		.Before(Restore)
